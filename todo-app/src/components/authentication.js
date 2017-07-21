@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import skygear from 'skygear';
 
 export function signup (username, password, passwordConf) {
@@ -6,7 +6,7 @@ export function signup (username, password, passwordConf) {
     skygear.signupWithUsername(username, password).then((user) => {
         console.log(user); // user object
         alert('Welcome, signed up successfully!');
-        location.href = 'onboarding-prof.html';
+        // location.href = 'onboarding-prof.html';
       }, (error) => {
         console.error(error);
         if (error.error.code === skygear.ErrorCodes.Duplicated) {
@@ -53,7 +53,7 @@ export function login (username, password) {
   if (checkLoginInfo(username,password)) {
     skygear.loginWithUsername(username, password).then((user) => {
       console.log(user); // user object
-      location.href = 'onboarding-prof.html';
+      // location.href = 'onboarding-prof.html';
     }, (error) => {
       console.error(error);    
       if (error.error.code === skygear.ErrorCodes.InvalidCredentials ||
@@ -82,7 +82,7 @@ export function getUserName() {
 export function logout () {
   skygear.logout().then(() => {
     console.log('logout successfully');
-    location.href = "index.html";
+    // location.href = "index.html";
   }, (error) => {
     console.error(error);
   });
