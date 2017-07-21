@@ -1,0 +1,11 @@
+{
+  "generator-skygear": {
+    "generatedWithVersion": 0
+  },
+  "generator-react-webpack": {
+    "appName": "toDoApp",
+    "style": "css",
+    "postcss": false,
+    "generatedWithVersion": 3
+  }
+}
