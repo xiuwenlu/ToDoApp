@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import skygear from 'skygear';
 import './App.css';
 import './styles/foundation.css';
 import './styles/App.css';
-import {signup, login, logout} from './components/authentication';
-import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, userIcon} from './components/login-signup';
+import {signup, login, logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
+import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 
 
 class App extends Component {
@@ -62,20 +63,50 @@ class App extends Component {
          this.setState ({ passwordConf: event.target.value });
     }
     handleLoginSub() {
-        this.setState ({
-            loggedIn: true,
-            signupSubmit:false,
-            loginSubmit:true
-        });
-        login(this.state.username, this.state.password);
+        
+        if (checkLoginInfo(this.state.username,this.state.password)) {
+            skygear.loginWithUsername(this.state.username, this.state.password).then((user) => {
+            console.log(user); // user object
+            // location.href = 'onboarding-prof.html';
+             this.setState ({
+                loggedIn: true,
+                signupSubmit:false,
+                loginSubmit:true
+            });
+            }, (error) => {
+                console.error(error);    
+                if (error.error.code === skygear.ErrorCodes.InvalidCredentials ||
+                    error.error.code === skygear.ErrorCodes.ResourceNotFound ) {
+                    // incorrect username or password
+                    alert('Incorrect Username or Password.');
+                } else {
+                    alert('Error!');
+                }
+            });
+        }
     }
     handleSignupSub() {
-        this.setState ({
-            loggedIn: true,
-            signupSubmit:true,
-            loginSubmit:false
-        });
-        signup(this.state.username, this.state.password, this.state.passwordConf);
+        if (checkSignupInfo(this.state.username, this.state.password, this.state.passwordConf)) {
+            skygear.signupWithUsername(this.state.username, this.state.password).then((user) => {
+                console.log(user); // user object
+                alert('Welcome, signed up successfully!');
+                // location.href = 'onboarding-prof.html';
+                this.setState ({
+                    loggedIn: true,
+                    signupSubmit:true,
+                    loginSubmit:false
+                });
+            }, (error) => {
+                console.error(error);
+                if (error.error.code === skygear.ErrorCodes.Duplicated) {
+                // the username has already existed
+                    alert('This user already exists.');
+                } else {
+                    // other kinds of error
+                    alert('Error!');
+                }
+            });
+        }
     }
 
     render() {
@@ -91,7 +122,7 @@ class App extends Component {
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
-            userlogo = <userIcon />;
+            userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
         } else if (isSignup && !loggedIn) {
@@ -118,24 +149,19 @@ class App extends Component {
         // }
         return (
             <div>
-                <div data-sticky-container>
-                    <header className='header' data-sticky data-options='marginTop:0;'  data-sticky-on='small' data-anchor='content'>
-                        <div className='row' id='header'>
-                            <div className='large-3 medium-5 small-6 columns'>
-                                Skygear To-Do List
-                            </div>
-                            <div className='large-8 medium-6 hide-for-small-only columns text-right'>
-                                <ul >
-                                    <li>{userlogo}</li>
-                                    <li>{user}</li>
-                                    {/* <li>{button}</li> */}
-                                </ul>
-                            </div>
-                             <div className='large-2 medium-3 small-6 columns text-right'>
-                                {button}
-                            </div> 
-                        </div>
-                    </header>
+                <div className='top-bar' id='responsive-menu'>
+                    <div className='top-bar-left'>
+                        <ul className='dropdown menu' data-dropdown-menu>
+                        <li id='heading'>Skygear ToDo List</li>
+                        </ul>
+                    </div>
+                    <div className='top-bar-right'>
+                        <ul className='menu'>
+                            <li id='user-logo'>{userlogo}</li>
+                            <li id='user'>{user}</li>
+                            <li id='logout-switch'>{button}</li>
+                        </ul>
+                    </div>
                 </div>
                 {form}
             </div>

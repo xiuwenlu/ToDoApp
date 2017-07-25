@@ -7,16 +7,22 @@ export function signup (username, password, passwordConf) {
         console.log(user); // user object
         alert('Welcome, signed up successfully!');
         // location.href = 'onboarding-prof.html';
+        return true;
       }, (error) => {
         console.error(error);
         if (error.error.code === skygear.ErrorCodes.Duplicated) {
           // the username has already existed
           alert('This user already exists.');
+          return false;
+
         } else {
             // other kinds of error
             alert('Error!');
+            return false;
           }
         });
+  } else {
+    return false;
   }
 }
 
@@ -54,16 +60,21 @@ export function login (username, password) {
     skygear.loginWithUsername(username, password).then((user) => {
       console.log(user); // user object
       // location.href = 'onboarding-prof.html';
+      return true;
     }, (error) => {
       console.error(error);    
       if (error.error.code === skygear.ErrorCodes.InvalidCredentials ||
         error.error.code === skygear.ErrorCodes.ResourceNotFound ) {
         // incorrect username or password
-      alert('Incorrect Username or Password.');
+        alert('Incorrect Username or Password.');
+        return false;
     } else {
       alert('Error!');
+      return false;
     }
   });
+  } else {
+    return false;
   } 
 }
 

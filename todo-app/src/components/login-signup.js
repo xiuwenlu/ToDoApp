@@ -64,6 +64,6 @@ export function LoginForm(props) {
     );
 }
 
-export function userIcon(props) {
-    return (<img src='src/images/icon-todo-100.png' id='user-icon' alt=''></img>);
+export function UserLogo(props) {
+    return (<img src={require('../images/abstract-user.png')} alt=''></img>);
 }
