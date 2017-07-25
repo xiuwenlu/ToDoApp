@@ -6,6 +6,8 @@ import './styles/App.css';
 import {logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 import AssignmentForm from './components/AssignmentForm';
+import addTasks from './components/addTasks';
+
 
 class App extends Component {
   constructor(props) {
@@ -119,6 +121,8 @@ class App extends Component {
         let form = null;
         let user = null;
         let userlogo = null;
+        
+        // let assign = <AssignmentForm addTask= {<addTasks />} />;
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
@@ -165,6 +169,7 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
+                {/* {assign} */}
             </div>
         );
     }
