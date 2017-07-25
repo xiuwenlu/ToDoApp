@@ -3,9 +3,9 @@ import skygear from 'skygear';
 import './App.css';
 import './styles/foundation.css';
 import './styles/App.css';
-import {signup, login, logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
+import {logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
-
+import AssignmentForm from './components/AssignmentForm';
 
 class App extends Component {
   constructor(props) {
@@ -125,6 +125,7 @@ class App extends Component {
             userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
+            form = <AssignmentForm />;
         } else if (isSignup && !loggedIn) {
             button = <SignupButton onClick={this.handleSignUpClick} />;
             form = <LoginForm login={this.handleLoginSub}
