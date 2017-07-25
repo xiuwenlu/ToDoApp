@@ -31,16 +31,16 @@ export function SignupForm(props) {
             <div id='sign-in'>
                 <h5>Sign Up</h5>
                 <div className='labels'>
-                    Username <input className='logins' type='text' id='username' required></input>
+                    Username <input className='logins' type='text' id='username' value={props.username} onChange={props.handleUsername} required></input>
                 </div>
                 <div className='labels'>
-                    Password <input className='logins' type='password' id='password' required></input>
+                    Password <input className='logins' type='password' id='password' value={props.password} onChange={props.handlePassword} required></input>
                 </div>
                 <div className='signup-switch'>
                     <div className='labels'>
-                        Confirm Password <input className='logins' type='password' id='passwordConf' required></input>
+                        Confirm Password <input className='logins' type='password' id='passwordConf' value={props.passwordConf} onChange={props.handlePasswordConf} required></input>
                     </div>
-                    <button id='sign-up' onClick={props.signUp}>Sign Up</button>
+                    <button id='sign-up' onClick={props.signup}>Sign Up</button>
                 </div>
             </div>
         </div>
@@ -53,13 +53,17 @@ export function LoginForm(props) {
             <div id='sign-in'>
                 <h5>Login</h5>
                 <div className='labels'>
-                    Username <input className='logins' type='text' id='username' required></input>
+                    Username <input className='logins' type='text' id='username' value={props.username} onChange={props.handleUsername} required></input>
                 </div>
                 <div className='labels'>
-                    Password <input className='logins' type='password' id='password' required></input>
+                    Password <input className='logins' type='password' id='password' value={props.password} onChange={props.handlePassword} required></input>
                 </div>
                     <button id='log-in' onClick={props.login}>Login</button>
             </div>
          </div>
     );
+}
+
+export function userIcon(props) {
+    return (<img src='src/images/icon-todo-100.png' id='user-icon' alt=''></img>);
 }
