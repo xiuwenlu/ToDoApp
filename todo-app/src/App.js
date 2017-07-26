@@ -184,7 +184,7 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
-                {/* {assign}  */}
+                {assign}  
             </div>
         );
     }

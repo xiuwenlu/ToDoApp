@@ -253,17 +253,17 @@ li:hover {
 }
 
 .popup {
-	/* position:fixed;
-    top: 50%;
-    left: 50%; */
-	margin: 75px auto;
+	position:fixed;
+	top: 20%;
+	left: 25%;
+	margin: 75px auto; 
 	padding: 20px;
-	padding-right: 60px; 
+	padding-right: 60px;  
 	background: #fff;
 	border: 1px solid #e6e6e6;
 	width: 700px ;
 	box-shadow: 0 0 50px rgba(0,0,0,0.5);
-	 position: relative; 
+	/* position: relative;  */
 }
 #assignment-card {
 	border: 1px solid #e6e6e6;
@@ -302,16 +302,14 @@ li:hover {
 	background-color: white !important;
 	color: #888888 !important;
 	border:1px solid #888888 !important;
-	/* margin-right: 10% !important;  */
 }
 #delete-assign-pop {
 	position: center !important;
 	text-align: center;
 	width: 450px;
+	left: 35%;
+
 }
-/* #confirm-delete button {
-	margin-left: 50% !important;
-} */
 #delete-assign-pop h6 {
 	padding: 10%;
 	text-align: center;
@@ -319,20 +317,14 @@ li:hover {
 
 #task-card {
 	border: 1px solid #e6e6e6;
-	padding: 3%;
-	padding-right: 10%;
+	padding: 3%; 
 	margin-right: 2%;
 	border-radius: 5px;
 	text-align: left;
 }
-.overlay {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.5);
-	transition: opacity 200ms;
-  visibility: hidden;
-	opacity: 0;
+#task-completed, #cancel-add {
+	float:left !important;
+}
+.cancel-delete {
+	float:left !important;
 }

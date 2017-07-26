@@ -25,8 +25,8 @@ class TaskCard extends Component {
         return(
             <div id='task-card'>
                 <div className='row'>
-                    <div className='large-2 columns' >
-                        Check
+                    <div className='large-2 columns'>
+                        <button id='task-completed'><img src={require('../images/gray-check.png')} alt=''></img></button>
                     </div>
                     <div className='large-6 columns'>
                         <div>Title</div>

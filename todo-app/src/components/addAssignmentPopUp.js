@@ -53,7 +53,7 @@ class AddAssignmentPopUp extends Component {
                     <button id='add-assign' onClick={this.addAssignment}>Confirm</button>
                 </div> 
                 <div className='medium-4 columns'>
-                    <button className='cancel-delete' id='cancel-add' onClick={this.closeModal}> Cancel</button>
+                    <button className='cancel-delete' onClick={this.closeModal}> Cancel</button>
                 </div> 
             </div>
         </div>

@@ -27,12 +27,17 @@ class DeleteAssignmentPopup extends Component {
   }
 
   render () {
+    const isAssignment = this.state.assignment; 
+    let heading = 'Assignment';
+    if (!isAssignment) {
+        heading = 'task';
+    }
     return (
         <div>
             <button className='close-buttons' onClick={this.openModal}>X</button>
             {this.state.modalActive && (
                 <div className='popup' id='delete-assign-pop'>
-                    <div><h6>Delete this assignment?</h6></div>
+                    <div><h6>Delete this {heading}?</h6></div>
                     <div className='row' id='popup-buttons'>
                         <div className='medium-6 columns'>
                             <button id='confirm-delete' onClick={this.deleteAssignment}>Confirm</button>
