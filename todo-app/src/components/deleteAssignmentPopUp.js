@@ -8,7 +8,7 @@ class DeleteAssignmentPopup extends Component {
 
   constructor (props) {
     super(props)
-    this.state = { modalActive: false }
+    this.state = { modalActive: false, assignment:true }
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.deleteAssignment = this.deleteAssignment.bind(this); 

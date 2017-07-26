@@ -253,14 +253,17 @@ li:hover {
 }
 
 .popup {
+	/* position:fixed;
+    top: 50%;
+    left: 50%; */
 	margin: 75px auto;
 	padding: 20px;
-	padding-right: 60px;
+	padding-right: 60px; 
 	background: #fff;
 	border: 1px solid #e6e6e6;
 	width: 700px ;
 	box-shadow: 0 0 50px rgba(0,0,0,0.5);
-	position: relative;
+	 position: relative; 
 }
 #assignment-card {
 	border: 1px solid #e6e6e6;
@@ -272,7 +275,7 @@ li:hover {
 	padding-left: 6%;
 	height: 10%;
 }
-#assignment-card button {
+#assignment-card button, #task-card button {
 	background-color: transparent;
 	color: #e6e6e6;
 	width: 30%;
@@ -302,7 +305,7 @@ li:hover {
 	/* margin-right: 10% !important;  */
 }
 #delete-assign-pop {
-	margin: 100px auto;
+	position: center !important;
 	text-align: center;
 	width: 450px;
 }
@@ -312,4 +315,24 @@ li:hover {
 #delete-assign-pop h6 {
 	padding: 10%;
 	text-align: center;
+}
+
+#task-card {
+	border: 1px solid #e6e6e6;
+	padding: 3%;
+	padding-right: 10%;
+	margin-right: 2%;
+	border-radius: 5px;
+	text-align: left;
+}
+.overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+	transition: opacity 200ms;
+  visibility: hidden;
+	opacity: 0;
 }

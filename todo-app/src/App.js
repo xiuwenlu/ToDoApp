@@ -9,7 +9,8 @@ import AssignmentForm from './components/AssignmentForm';
 import AddTasks from './components/addTasks';
 import AddAssignmentPopUp from './components/addAssignmentPopUp';
 import AssignmentCard from './components/assignmentCard';
-import DeleteAssignmentPopup from './components/deleteAssignmentPopUp'
+import DeleteAssignmentPopup from './components/deleteAssignmentPopUp';
+import TaskCard from './components/taskCard';
 
 
 class App extends Component {
@@ -131,6 +132,9 @@ class App extends Component {
                         <AssignmentCard key='3'> 
                             <DeleteAssignmentPopup key='4'/>
                         </AssignmentCard>
+                        <TaskCard key='5'>
+                            <DeleteAssignmentPopup key='6' assignment='false' />
+                        </TaskCard>
                     </AssignmentForm>;
 
         if(loggedIn) {

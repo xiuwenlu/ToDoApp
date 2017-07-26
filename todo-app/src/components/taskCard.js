@@ -25,10 +25,22 @@ class TaskCard extends Component {
         return(
             <div id='task-card'>
                 <div className='row'>
-                            
+                    <div className='large-2 columns' >
+                        Check
+                    </div>
+                    <div className='large-6 columns'>
+                        <div>Title</div>
+                        <div>Due Date</div>
+                    </div>
+                    <div className='large-2 columns'>
+                        Overdue
+                    </div> 
+                    <div className='large-2 columns' id='delete-task'>
+                        {this.props.children}
+                    </div> 
                 </div>
             </div>
         );
     }
 }
-export default AssignmentCard;
+export default TaskCard;
