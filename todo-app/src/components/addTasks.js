@@ -4,22 +4,24 @@ import '../App.css';
 import '../styles/foundation.css';
 import '../styles/App.css';
 
-class addTasks extends Component {
+class AddTasks extends Component {
     render() {
         return(
-            <div> 
-                <div className='medium-4 columns' >
-                    <input type = 'text' id='task-input' placeholder='Enter task here...' maxlength='140'></input>
+            <div className='row' id='tasks'> 
+                <div className='large-4 columns' >
+                    Task
+                <input type = 'text' id='task-input' placeholder='Enter task here...' maxLength='140'></input>
                 </div>
-                <div className='medium-4 columns'>
+                <div className='large-4 columns'>
+                    Due Date & Time
                     <input type = 'datetime-local' id='due-date'></input>
                 </div>
-                <div className='medium-4 columns'>
-                    <button onclick='newElement()' id='add-task'> Add New Task</button>
-                </div>
+                <div className='large-4 columns'>
+                    <button id='add-task'> + New Task</button>
+                </div> 
             </div>
         );
     }
 }
-export default addTasks;
+export default AddTasks;
    

@@ -6,7 +6,10 @@ import './styles/App.css';
 import {logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 import AssignmentForm from './components/AssignmentForm';
-import addTasks from './components/addTasks';
+import AddTasks from './components/addTasks';
+import AddAssignmentPopUp from './components/addAssignmentPopUp';
+import AssignmentCard from './components/assignmentCard';
+import DeleteAssignmentPopup from './components/deleteAssignmentPopUp'
 
 
 class App extends Component {
@@ -122,14 +125,21 @@ class App extends Component {
         let user = null;
         let userlogo = null;
         
-        // let assign = <AssignmentForm addTask= {<addTasks />} />;
+        let assign = <AssignmentForm> 
+                        <AddTasks key='1' /> 
+                        <AddAssignmentPopUp key='2'/>
+                        <AssignmentCard key='3'> 
+                            <DeleteAssignmentPopup key='4'/>
+                        </AssignmentCard>
+                    </AssignmentForm>;
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
             userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
-            form = <AssignmentForm />;
+            // form = <AssignmentForm />;
+            form = <AssignmentForm> <addTasks /> </AssignmentForm>;
         } else if (isSignup && !loggedIn) {
             button = <SignupButton onClick={this.handleSignUpClick} />;
             form = <LoginForm login={this.handleLoginSub}
@@ -169,7 +179,7 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
-                {/* {assign} */}
+                {assign} 
             </div>
         );
     }

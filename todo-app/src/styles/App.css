@@ -251,3 +251,65 @@ li:hover {
 #subtask-container h5 {
 	padding-top:3%;
 }
+
+.popup {
+	margin: 75px auto;
+	padding: 20px;
+	padding-right: 60px;
+	background: #fff;
+	border: 1px solid #e6e6e6;
+	width: 700px ;
+	box-shadow: 0 0 50px rgba(0,0,0,0.5);
+	position: relative;
+}
+#assignment-card {
+	border: 1px solid #e6e6e6;
+	padding: 3%;
+	margin-left: -5%;
+	margin-right: -5%;
+	text-align: left;
+	border-radius:5px;
+	padding-left: 6%;
+	height: 10%;
+}
+#assignment-card button {
+	background-color: transparent;
+	color: #e6e6e6;
+	width: 30%;
+	float: right;
+}
+#assignment-card h5 {
+	font-weight: 500;
+	text-transform: none;
+}
+
+#popup-buttons button{
+	color: white;
+	background-color: #00c6b6;
+	height: 35px;
+	width: 120px;
+	padding: 0px;
+	margin-bottom: 15px;
+	border-radius: 25px;
+	text-transform: uppercase;
+	font-weight: bold;
+	margin-left: 30%;
+}
+.cancel-delete {
+	background-color: white !important;
+	color: #888888 !important;
+	border:1px solid #888888 !important;
+	/* margin-right: 10% !important;  */
+}
+#delete-assign-pop {
+	margin: 100px auto;
+	text-align: center;
+	width: 450px;
+}
+/* #confirm-delete button {
+	margin-left: 50% !important;
+} */
+#delete-assign-pop h6 {
+	padding: 10%;
+	text-align: center;
+}
