@@ -143,7 +143,8 @@ class App extends Component {
             //Icon made by Freepik from www.flaticon.com
             user = username;
             // form = <AssignmentForm />;
-            form = <AssignmentForm> <addTasks /> </AssignmentForm>;
+            // form = <AssignmentForm> <addTasks /> </AssignmentForm>;
+            form = assign;
         } else if (isSignup && !loggedIn) {
             button = <SignupButton onClick={this.handleSignUpClick} />;
             form = <LoginForm login={this.handleLoginSub}
@@ -183,7 +184,7 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
-                {assign} 
+                {/* {assign}  */}
             </div>
         );
     }
