@@ -9,43 +9,48 @@ class AssignmentCard extends Component {
     constructor (props) {
         super(props)
         this.state = { modalActive: true }
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.openCard = this.openCard.bind(this);
+        this.deleteCard = this.deleteCard.bind(this);
     }
 
-    openModal () {
+    openCard() {
         this.setState({ modalActive: true });
     }
 
-    closeModal () {
+    deleteCard() {
         this.setState({ modalActive: false });
     }
 
     render() {
-        
         return(
-            <div id='assignment-card'>
-                <div className='row'>
-                    <div className='small-5 columns'>
-                        <h5>{this.props.assignName}</h5>
-                    </div>
-                    <div className='small-5 columns'>
-                         {this.props.children} 
-                    </div>
-                </div>
-                <div className='assign-info'>
-                    <p>Course {this.props.courseName}</p>
-                    <div className='row'>
-                        <div className='small-5 columns'>
-                            <p>Due Date {this.props.Deadline}</p>
+            <div>
+                {this.state.modalActive && (
+                    <div id='assignment-card'>
+                        <div className='row'>
+                            <div className='small-5 columns'>
+                                <h5>{this.props.assignName}</h5>
+                            </div>
+                            <div className='small-5 columns'>
+                                {/* {this.props.children} */}
+                                {React.cloneElement(this.props.children, { deleteCard: this.deleteCard })}
+                            </div>
                         </div>
-                        <div className='small-5 columns'>
-                            <p>Overdue</p>
-                        </div>  
-                    </div>           
-                </div>
+                        <div className='assign-info'>
+                            <p>Course {this.props.courseName}</p>
+                            <div className='row'>
+                                <div className='small-5 columns'>
+                                    <p>Due Date {this.props.Deadline}</p>
+                                </div>
+                                <div className='small-5 columns'>
+                                    <p>Overdue</p>
+                                </div>  
+                            </div>           
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
 }
+
 export default AssignmentCard;

@@ -43,8 +43,9 @@ class AddAssignmentPopUp extends Component {
         });
         record.AssignSeqNum = new skygear.Sequence();
         skygear.privateDB.save(record).then((record) => {
-            console.log("This is how the record looks: " + record._id);
-            this.closeModal();
+        console.log("This is how the record looks: " + record._id);
+        this.closeModal();
+        //need to add this assignment to the list.
         }, (error) => {
             console.error(error);
             this.setState ({ modalActive: true, assignName:'', courseName:'', Deadline:''});

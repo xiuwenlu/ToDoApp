@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import skygear from 'skygear';
+import skygear from 'skygear';
 import '../App.css';
 import '../styles/foundation.css';
 import '../styles/App.css';
@@ -23,6 +23,52 @@ class DeleteAssignmentPopup extends Component {
   }
 
   deleteAssignment () {
+        let type = 'Assignments'
+        if(this.props.type !== 'assignment') {
+            type = 'ToDos'
+        }
+        skygear.privateDB.delete({
+            id: type + '/' + this.props.id
+        }).then((record) => {
+            console.log(record);
+            console.log('Delete '+ this.props.type +' successfully!');
+            this.props.deleteCard();
+        }, (error) => {
+            console.error(error);
+        });
+        if (this.props.type === 'assignment') {
+            const ToDos = skygear.Record.extend('ToDos'); 
+            var query = new skygear.Query(ToDos);
+            query.equalTo('AssignID', this.props.id);
+            var foundNotes = [];
+            skygear.privateDB.query(query)
+            .then((records) => {
+            if (records.length > 0) {
+                console.log(`Found ${records.length} record, going to delete them.`);
+                foundNotes = records;
+                var recsToDelete = [];
+                records.forEach(function(rec) {
+                recsToDelete.push(rec);
+                });
+                return skygear.privateDB.delete(recsToDelete); // return a Promise object
+            } else {
+                console.log('There were not any to-dos for this assignment.');
+            }
+            })
+            .then((errors) => {
+            if(errors) {
+                errors.forEach((perError, idx) => {
+                if (perError) {
+                    console.error('Fail to delete', foundNotes[idx]);
+                }
+                });
+            } else {
+                console.log('Delete successfully!');
+            }
+            }, (reqError) => {
+            console.error('Request error', reqError);
+            });
+        }
       this.setState({modalActive: false});
   }
 

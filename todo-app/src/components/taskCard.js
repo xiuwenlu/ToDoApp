@@ -10,14 +10,14 @@ class TaskCard extends Component {
         super(props)
         this.state = { modalActive: false }
         this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.deleteCard = this.deleteCard.bind(this);
     }
 
     openModal () {
         this.setState({ modalActive: true });
     }
 
-    closeModal () {
+    deleteCard() {
         this.setState({ modalActive: false });
     }
 
@@ -43,4 +43,5 @@ class TaskCard extends Component {
         );
     }
 }
+
 export default TaskCard;

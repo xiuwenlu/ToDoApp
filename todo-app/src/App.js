@@ -11,6 +11,7 @@ import AddAssignmentPopUp from './components/addAssignmentPopUp';
 import AssignmentCard from './components/assignmentCard';
 import DeleteAssignmentPopup from './components/deleteAssignmentPopUp';
 import TaskCard from './components/taskCard';
+// import AssignmentReducer from './reducers/assignment-reducer';
 
 
 class App extends Component {
@@ -94,6 +95,7 @@ class App extends Component {
                 console.log(Array.isArray(r));
                 console.log(r);
                 this.setState ({AssignmentList: r});
+                // <AssignmentReducer assignmentList={this.state.AssignmentList} />;
             }, (error) => {
                 console.error(error);
             });
@@ -146,7 +148,7 @@ class App extends Component {
         let userlogo = null;
         const listItems = assignmentList.map((assignment) =>
             <AssignmentCard key={assignment.AssignSeqNum} assignName={assignment.Assignment} courseName={assignment.Course} Deadline={assignment.Deadline}> 
-                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment'/>
+                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' id={assignment._id}/>
             </AssignmentCard>
         );
         let assign = <AssignmentForm> 
