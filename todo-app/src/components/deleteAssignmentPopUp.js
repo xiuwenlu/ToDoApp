@@ -8,7 +8,7 @@ class DeleteAssignmentPopup extends Component {
 
   constructor (props) {
     super(props)
-    this.state = { modalActive: false, assignment:true }
+    this.state = { modalActive: false }
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.deleteAssignment = this.deleteAssignment.bind(this); 
@@ -27,17 +27,13 @@ class DeleteAssignmentPopup extends Component {
   }
 
   render () {
-    const isAssignment = this.state.assignment; 
-    let heading = 'Assignment';
-    if (!isAssignment) {
-        heading = 'task';
-    }
+
     return (
         <div>
             <button className='close-buttons' onClick={this.openModal}>X</button>
             {this.state.modalActive && (
                 <div className='popup' id='delete-assign-pop'>
-                    <div><h6>Delete this {heading}?</h6></div>
+                    <div><h6>Delete this {this.props.type}?</h6></div>
                     <div className='row' id='popup-buttons'>
                         <div className='medium-6 columns'>
                             <button id='confirm-delete' onClick={this.deleteAssignment}>Confirm</button>

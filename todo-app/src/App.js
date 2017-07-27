@@ -32,7 +32,8 @@ class App extends Component {
             loginSubmit:false,
             username: '',
             password: '',
-            passwordConf: ''
+            passwordConf: '',
+            AssignmentList: []
         };
     }
     
@@ -53,7 +54,8 @@ class App extends Component {
             loginSubmit:false,
             username: '',
             password: '',
-            passwordConf: ''
+            passwordConf: '',
+            AssignmentList: []
         });
     }
 
@@ -74,10 +76,26 @@ class App extends Component {
             skygear.loginWithUsername(this.state.username, this.state.password).then((user) => {
             console.log(user); // user object
             // location.href = 'onboarding-prof.html';
-             this.setState ({
+            this.setState ({
                 loggedIn: true,
                 signupSubmit:false,
                 loginSubmit:true
+            });
+            const LIMIT = 9999;
+            const Assignments = skygear.Record.extend('Assignments');
+            const query = new skygear.Query(Assignments);
+            query.overallCount = true;
+            query.limit = LIMIT;
+            skygear.privateDB.query(query).then((records) => {
+                console.log(records);
+                console.log(records.constructor);
+                var r = Array.from(records);
+                console.log(Array.isArray(records));
+                console.log(Array.isArray(r));
+                console.log(r);
+                this.setState ({AssignmentList: r});
+            }, (error) => {
+                console.error(error);
             });
             }, (error) => {
                 console.error(error);    
@@ -121,19 +139,25 @@ class App extends Component {
         const username = this.state.username;
         const password = this.state.password;
         const passwordConf = this.state.passwordConf;
+        const assignmentList = this.state.AssignmentList;
         let button = null;
         let form = null;
         let user = null;
         let userlogo = null;
-        
+        const listItems = assignmentList.map((assignment) =>
+            <AssignmentCard key={assignment.AssignSeqNum} assignName={assignment.Assignment} courseName={assignment.Course} Deadline={assignment.Deadline}> 
+                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment'/>
+            </AssignmentCard>
+        );
         let assign = <AssignmentForm> 
                         <AddTasks key='1' /> 
                         <AddAssignmentPopUp key='2'/>
-                        <AssignmentCard key='3'> 
-                            <DeleteAssignmentPopup key='4'/>
-                        </AssignmentCard>
+                        {/* {listItems} */}
+                        {/* <AssignmentCard key='3' assignments={assignmentList}> 
+                            <DeleteAssignmentPopup key='4' type='assignment'/>
+                        </AssignmentCard> */}
                         <TaskCard key='5'>
-                            <DeleteAssignmentPopup key='6' assignment='false' />
+                            <DeleteAssignmentPopup key='6' type='task'/>
                         </TaskCard>
                     </AssignmentForm>;
 
@@ -144,7 +168,18 @@ class App extends Component {
             user = username;
             // form = <AssignmentForm />;
             // form = <AssignmentForm> <addTasks /> </AssignmentForm>;
-            form = assign;
+            form = <AssignmentForm> 
+                        <AddTasks key='1' /> 
+                        <AddAssignmentPopUp key='2'/>
+                        {/* <AssignmentCard key='3' assignments={assignmentList}> 
+                            <DeleteAssignmentPopup key='4' type='assignment'/>
+                        </AssignmentCard> */}
+                        {listItems}
+                        <TaskCard key='5'>
+                            <DeleteAssignmentPopup key='6' type='task'/>
+                        </TaskCard>
+                    </AssignmentForm>;
+
         } else if (isSignup && !loggedIn) {
             button = <SignupButton onClick={this.handleSignUpClick} />;
             form = <LoginForm login={this.handleLoginSub}
@@ -184,7 +219,7 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
-                {assign}  
+                {/* {assign} */}
             </div>
         );
     }

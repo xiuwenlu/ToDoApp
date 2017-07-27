@@ -8,7 +8,7 @@ class AssignmentCard extends Component {
 
     constructor (props) {
         super(props)
-        this.state = { modalActive: false }
+        this.state = { modalActive: true }
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
     }
@@ -22,21 +22,22 @@ class AssignmentCard extends Component {
     }
 
     render() {
+        
         return(
             <div id='assignment-card'>
                 <div className='row'>
                     <div className='small-5 columns'>
-                        <h5>Assignment</h5>
+                        <h5>{this.props.assignName}</h5>
                     </div>
                     <div className='small-5 columns'>
                          {this.props.children} 
                     </div>
                 </div>
                 <div className='assign-info'>
-                    <p>Course</p>
+                    <p>Course {this.props.courseName}</p>
                     <div className='row'>
                         <div className='small-5 columns'>
-                            <p>Due Date</p>
+                            <p>Due Date {this.props.Deadline}</p>
                         </div>
                         <div className='small-5 columns'>
                             <p>Overdue</p>
