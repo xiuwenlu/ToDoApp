@@ -8,7 +8,7 @@ class TaskCard extends Component {
 
     constructor (props) {
         super(props)
-        this.state = { modalActive: false }
+        this.state = { modalActive: true }
         this.openModal = this.openModal.bind(this);
         this.deleteCard = this.deleteCard.bind(this);
     }
@@ -23,22 +23,27 @@ class TaskCard extends Component {
 
     render() {
         return(
-            <div id='task-card'>
-                <div className='row'>
-                    <div className='large-2 columns'>
-                        <button id='task-completed'><img src={require('../images/gray-check.png')} alt=''></img></button>
+            <div>
+                {this.state.modalActive && (
+                <div id='task-card'>
+                    <div className='row'>
+                        <div className='large-2 columns'>
+                            <button id='task-completed'><img src={require('../images/gray-check.png')} alt=''></img></button>
+                        </div>
+                        <div className='large-6 columns'>
+                            <div>{this.props.taskName}</div>
+                            <div>{this.props.Deadline}</div>
+                        </div>
+                        <div className='large-2 columns'>
+                            Overdue
+                        </div> 
+                        <div className='large-2 columns' id='delete-task'>
+                            {/* {this.props.children} */}
+                            {React.cloneElement(this.props.children, { deleteCard: this.deleteCard })}
+                        </div> 
                     </div>
-                    <div className='large-6 columns'>
-                        <div>Title</div>
-                        <div>Due Date</div>
-                    </div>
-                    <div className='large-2 columns'>
-                        Overdue
-                    </div> 
-                    <div className='large-2 columns' id='delete-task'>
-                        {this.props.children}
-                    </div> 
                 </div>
+                )}
             </div>
         );
     }

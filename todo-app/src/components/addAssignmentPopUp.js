@@ -46,6 +46,7 @@ class AddAssignmentPopUp extends Component {
         console.log("This is how the record looks: " + record._id);
         this.props.setAssignment(record._id, record);
         this.closeModal();
+        document.getElementById('task-list').innerHTML = '';
         //need to add this assignment to the list.
         }, (error) => {
             console.error(error);

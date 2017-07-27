@@ -32,6 +32,7 @@ class AddTasks extends Component {
             skygear.privateDB.save(record).then((record) => {
                 console.log("This is how the record looks: " + record._id);
                 this.setState ({taskName:'', Deadline:''});
+                this.props.addTaskToList(record);
             }, (error) => {
                 console.error(error);
                 this.setState ({taskName:'', Deadline:''});

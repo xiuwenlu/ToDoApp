@@ -28,7 +28,7 @@ class AssignmentForm extends Component {
                 </div>
                 <div className='large-8 columns' id = 'subtask-container'>
                     <h5> Your Current To-Do List </h5>
-                    <div>{this.props.children[0]}</div>
+                    <div>{React.cloneElement(this.props.children[0], {addTaskToList:this.props.addTaskToList})}</div>
                     <div className='tabs-content' data-tabs-content='example-tabs' id='task-ul'>
                         <ul id='task-list'> 
                             {this.props.children[3]}

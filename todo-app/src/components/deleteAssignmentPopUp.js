@@ -85,7 +85,7 @@ class DeleteAssignmentPopup extends Component {
                             <button id='confirm-delete' onClick={this.deleteAssignment}>Confirm</button>
                         </div> 
                         <div className='medium-6 columns'>
-                            <button className='cancel-delete' onClick={this.closeModal}> Cancel</button>
+                            <button className='cancel-delete' onClick={this.closeModal}>Cancel</button>
                         </div> 
                     </div>
                 </div>

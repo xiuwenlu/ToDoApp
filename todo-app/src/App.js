@@ -27,6 +27,7 @@ class App extends Component {
         this.setCurrentAssignment = this.setCurrentAssignment.bind(this);
         this.AddTaskToList = this.AddTaskToList.bind(this);
         this.LoadTasks = this.LoadTasks.bind(this);
+        this.DisplayTasks = this.DisplayTasks.bind(this);
 
         this.state = {
             signup: true, 
@@ -80,7 +81,6 @@ class App extends Component {
         if (checkLoginInfo(this.state.username,this.state.password)) {
             skygear.loginWithUsername(this.state.username, this.state.password).then((user) => {
             console.log(user); // user object
-            // location.href = 'onboarding-prof.html';
             this.setState ({
                 loggedIn: true,
                 signupSubmit:false,
@@ -98,10 +98,14 @@ class App extends Component {
                 console.log(Array.isArray(records));
                 console.log(Array.isArray(r));
                 console.log(r);
-                if (r.length > 0) {
+                if (records.length > 0) {
                     this.setState ({currentAssignment: r[0]});
                 }
                 this.setState ({AssignmentList: r});
+                if(this.state.currentAssignment) {
+                    this.LoadTasks(this.state.currentAssignment);
+                }
+                //this needs to be changed later
             }, (error) => {
                 console.error(error);
             });
@@ -122,7 +126,6 @@ class App extends Component {
             skygear.signupWithUsername(this.state.username, this.state.password).then((user) => {
                 console.log(user); // user object
                 alert('Welcome, signed up successfully!');
-                // location.href = 'onboarding-prof.html';
                 this.setState ({
                     loggedIn: true,
                     signupSubmit:true,
@@ -146,8 +149,25 @@ class App extends Component {
         newAssignmentList.push(record);
         this.setState({currentAssignment:id, AssignmentList: newAssignmentList});
     }
+
     LoadTasks(Assignment_id) {
-        return null;
+        console.log("The current assignmentID: " + Assignment_id);
+        const LIMIT = 9999;
+        const ToDos = skygear.Record.extend('ToDos');
+        const query = new skygear.Query(ToDos);
+        query.overallCount = true;
+        query.limit = LIMIT;
+        skygear.privateDB.query(query).then((records) => {
+        console.log("Records: " + records);
+        console.log(records.constructor);
+        var r = Array.from(records);
+        console.log(Array.isArray(records));
+        console.log(Array.isArray(r));
+        console.log("Loaded records: " + r);
+        this.setState({TaskList:r});
+    }, (error) => {
+        console.error(error);
+    });
     }
 
     AddTaskToList(record) {
@@ -157,6 +177,19 @@ class App extends Component {
         this.setState({TaskList: newTaskList});
     }
 
+    DisplayTasks() {
+        if (this.state.currentAssignment) {
+            return (
+                this.state.TaskList.map((task) =>
+                <TaskCard 
+                    key={task.taskID} taskName={task.content} Deadline={task.Deadline}
+                > 
+                    <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}/>
+                </TaskCard>
+                )
+            );
+        }
+    }
     render() {
         const isSignup = this.state.signup;
         const loggedIn = this.state.loggedIn;
@@ -168,7 +201,7 @@ class App extends Component {
         let form = null;
         let user = null;
         let userlogo = null;
-        const listItems = assignmentList.map((assignment) =>
+        const listAssignments = assignmentList.map((assignment) =>
             <AssignmentCard 
                 key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
                 courseName={assignment.Course} Deadline={assignment.Deadline}
@@ -177,19 +210,23 @@ class App extends Component {
             </AssignmentCard>
         );
 
+        
+        const listTasts = this.DisplayTasks();
+
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
             userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
 
-            form = <AssignmentForm setAssignment={this.setCurrentAssignment}> 
+            form = <AssignmentForm setAssignment={this.setCurrentAssignment} addTaskToList={this.AddTaskToList}> 
                         <AddTasks key='1' /> 
                         <AddAssignmentPopUp key='2'/>
-                        {listItems}
-                        <TaskCard key='5'>
+                        {listAssignments}
+                        {listTasts}
+                        {/* <TaskCard key='5'>
                             <DeleteAssignmentPopup key='6' type='task'/>
-                        </TaskCard>
+                        </TaskCard> */}
                     </AssignmentForm>;
 
         } else if (isSignup && !loggedIn) {
