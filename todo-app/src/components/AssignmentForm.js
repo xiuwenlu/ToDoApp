@@ -18,7 +18,8 @@ class AssignmentForm extends Component {
                         </div>
                         <div className='large-5 columns' >
                             {/* <button id='add-assign'data-open='exampleModal1'>+ Add</button> */}
-                            {this.props.children[1]}
+                            {/* {this.props.children[1]} */}
+                            {React.cloneElement(this.props.children[1], { setAssignment: this.props.setAssignment})}
                         </div>
                     </div>
                     <ul className='vertical tabs' data-tabs id='example-tabs'>

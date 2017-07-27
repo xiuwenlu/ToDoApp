@@ -11,7 +11,6 @@ import AddAssignmentPopUp from './components/addAssignmentPopUp';
 import AssignmentCard from './components/assignmentCard';
 import DeleteAssignmentPopup from './components/deleteAssignmentPopUp';
 import TaskCard from './components/taskCard';
-// import AssignmentReducer from './reducers/assignment-reducer';
 
 
 class App extends Component {
@@ -25,6 +24,9 @@ class App extends Component {
         this.handlePasswordConf = this.handlePasswordConf.bind(this);
         this.handleLoginSub= this.handleLoginSub.bind(this);
         this.handleSignupSub = this.handleSignupSub.bind(this);
+        this.setCurrentAssignment = this.setCurrentAssignment.bind(this);
+        this.AddTaskToList = this.AddTaskToList.bind(this);
+        this.LoadTasks = this.LoadTasks.bind(this);
 
         this.state = {
             signup: true, 
@@ -34,7 +36,9 @@ class App extends Component {
             username: '',
             password: '',
             passwordConf: '',
-            AssignmentList: []
+            AssignmentList: [],
+            currentAssignment: null,
+            TaskList:[]
         };
     }
     
@@ -94,8 +98,10 @@ class App extends Component {
                 console.log(Array.isArray(records));
                 console.log(Array.isArray(r));
                 console.log(r);
+                if (r.length > 0) {
+                    this.setState ({currentAssignment: r[0]});
+                }
                 this.setState ({AssignmentList: r});
-                // <AssignmentReducer assignmentList={this.state.AssignmentList} />;
             }, (error) => {
                 console.error(error);
             });
@@ -134,6 +140,22 @@ class App extends Component {
             });
         }
     }
+    setCurrentAssignment(id, record) {
+        console.log('yesss set assigment');
+        let newAssignmentList = this.state.AssignmentList;
+        newAssignmentList.push(record);
+        this.setState({currentAssignment:id, AssignmentList: newAssignmentList});
+    }
+    LoadTasks(Assignment_id) {
+        return null;
+    }
+
+    AddTaskToList(record) {
+        console.log('yesss add task to list');
+        let newTaskList = this.state.TaskList;
+        newTaskList.push(record);
+        this.setState({TaskList: newTaskList});
+    }
 
     render() {
         const isSignup = this.state.signup;
@@ -147,35 +169,23 @@ class App extends Component {
         let user = null;
         let userlogo = null;
         const listItems = assignmentList.map((assignment) =>
-            <AssignmentCard key={assignment.AssignSeqNum} assignName={assignment.Assignment} courseName={assignment.Course} Deadline={assignment.Deadline}> 
+            <AssignmentCard 
+                key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
+                courseName={assignment.Course} Deadline={assignment.Deadline}
+            > 
                 <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' id={assignment._id}/>
             </AssignmentCard>
         );
-        let assign = <AssignmentForm> 
-                        <AddTasks key='1' /> 
-                        <AddAssignmentPopUp key='2'/>
-                        {/* {listItems} */}
-                        {/* <AssignmentCard key='3' assignments={assignmentList}> 
-                            <DeleteAssignmentPopup key='4' type='assignment'/>
-                        </AssignmentCard> */}
-                        <TaskCard key='5'>
-                            <DeleteAssignmentPopup key='6' type='task'/>
-                        </TaskCard>
-                    </AssignmentForm>;
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
             userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
-            // form = <AssignmentForm />;
-            // form = <AssignmentForm> <addTasks /> </AssignmentForm>;
-            form = <AssignmentForm> 
+
+            form = <AssignmentForm setAssignment={this.setCurrentAssignment}> 
                         <AddTasks key='1' /> 
                         <AddAssignmentPopUp key='2'/>
-                        {/* <AssignmentCard key='3' assignments={assignmentList}> 
-                            <DeleteAssignmentPopup key='4' type='assignment'/>
-                        </AssignmentCard> */}
                         {listItems}
                         <TaskCard key='5'>
                             <DeleteAssignmentPopup key='6' type='task'/>
@@ -221,7 +231,6 @@ class App extends Component {
                     </div>
                 </div>
                 {form}
-                {/* {assign} */}
             </div>
         );
     }
