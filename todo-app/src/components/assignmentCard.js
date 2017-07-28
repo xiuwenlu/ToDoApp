@@ -25,22 +25,21 @@ class AssignmentCard extends Component {
     handleSelect() {
         this.setState({selected:true});
         this.props.setSelectedAssignment(this.state.assignmentID);
-        this.props.handleRemoveSelect();
-        document.getElementById(this.state.assignmentID).className = 'selected';
+        this.props.handleRemoveSelect(this.state.assignmentID);
+        // document.getElementById(this.state.assignmentID).className = 'selected';
         this.props.LoadTasks(this.state.assignmentID);
     }
 
     render() {
         return(
-            <li id={this.state.assignmentID}  >
+            <div id={this.state.assignmentID} onClick={this.handleSelect}>
                 {this.state.modalActive && (
-                    <div id='assignment-card' onClick={this.handleSelect}>
+                    <div id='assignment-card'>
                         <div className='row'>
                             <div className='small-5 columns'>
                                 <h5>{this.props.assignName}</h5>
                             </div>
                             <div className='small-5 columns'>
-                                {/* {this.props.children} */}
                                 {React.cloneElement(this.props.children, { deleteCard: this.deleteCard })}
                             </div>
                         </div>
@@ -57,7 +56,7 @@ class AssignmentCard extends Component {
                         </div>
                     </div>
                 )}
-            </li>
+            </div>
         );
     }
 }

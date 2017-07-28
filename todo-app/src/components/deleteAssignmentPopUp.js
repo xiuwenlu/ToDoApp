@@ -33,6 +33,7 @@ class DeleteAssignmentPopup extends Component {
             console.log(record);
             console.log('Delete '+ this.props.type +' successfully!');
             this.props.deleteCard();
+            this.props.removeFromList(this.props.type, this.props.id);
         }, (error) => {
             console.error(error);
         });
@@ -64,6 +65,7 @@ class DeleteAssignmentPopup extends Component {
                 });
             } else {
                 console.log('Delete successfully!');
+                document.getElementById('task-list').innerHTML = '';
             }
             }, (reqError) => {
             console.error('Request error', reqError);

@@ -20,8 +20,6 @@ class AddAssignmentPopUp extends Component {
     this.handleAssignName = this.handleAssignName.bind(this);
     this.handleCourseName = this.handleCourseName.bind(this);
     this.handleDeadline = this.handleDeadline.bind(this);
-    // const LIMIT = 9999;
-    // const ToDos = skygear.Record.extend('ToDos');
   }
 
   openModal() {
@@ -38,8 +36,8 @@ class AddAssignmentPopUp extends Component {
     } else {
         const Assignments = skygear.Record.extend('Assignments');
         var record = new Assignments({
-        "Assignment" : this.state.assignName, "Course" : this.state.courseName, 
-        "Deadline": this.state.Deadline, "Overdue:": false
+        'Assignment' : this.state.assignName, 'Course' : this.state.courseName, 
+        'Deadline': this.state.Deadline, 'Overdue': false
         });
         record.AssignSeqNum = new skygear.Sequence();
         skygear.privateDB.save(record).then((record) => {
@@ -47,7 +45,7 @@ class AddAssignmentPopUp extends Component {
         this.props.setAssignment(record._id, record);
         this.closeModal();
         document.getElementById('task-list').innerHTML = '';
-        //need to add this assignment to the list.
+        // document.getElementById(record._id).className = 'selected';
         }, (error) => {
             console.error(error);
             this.setState ({ modalActive: true, assignName:'', courseName:'', Deadline:''});

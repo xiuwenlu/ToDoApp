@@ -98,3 +98,23 @@ export function logout () {
     console.error(error);
   });
 }
+
+export function checkOverdue(deadline) {
+  let dateVal = deadline.split('T')[0];
+  let timeVal = deadline.split('T')[1];
+  let hrVal = timeVal.split(':')[0];
+  let minVal = timeVal.split(':')[1];
+  let dueTime = new Date(dateVal);
+  dueTime.setHours(hrVal);
+  dueTime.setMinutes(minVal);
+
+  const currentTime = new Date();
+  console.log('the current time:' + currentTime);
+  console.log('due time: ' +  dueTime);
+  const timeDiff = dueTime - currentTime;
+  if (timeDiff <= 0) {
+      return true;
+  } else {
+    return false;
+  }
+}

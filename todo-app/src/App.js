@@ -3,7 +3,7 @@ import skygear from 'skygear';
 import './App.css';
 import './styles/foundation.css';
 import './styles/App.css';
-import {logout, checkLoginInfo, checkSignupInfo} from './components/authentication';
+import {logout, checkLoginInfo, checkSignupInfo, checkOverdue} from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 import AssignmentForm from './components/AssignmentForm';
 import AddTasks from './components/addTasks';
@@ -30,6 +30,12 @@ class App extends Component {
         this.DisplayTasks = this.DisplayTasks.bind(this);
         this.setSelectedAssignment = this.setSelectedAssignment.bind(this);
         this.handleRemoveSelect = this.handleRemoveSelect.bind(this);
+        this.removeFromList = this.removeFromList.bind(this);
+        this.loadSublistPushNotifDeadlines = this.loadSublistPushNotifDeadlines.bind(this);
+        this.setPushNotif = this.setPushNotif.bind(this);
+        this.updateRecordByID = this.updateRecordByID.bind(this);
+        this.notifyMe = this.notifyMe.bind(this);
+
         this.state = {
             signup: true, 
             loggedIn: false,
@@ -40,7 +46,8 @@ class App extends Component {
             passwordConf: '',
             AssignmentList: [],
             currentAssignment: null,
-            TaskList:[]
+            TaskList:[],
+            AllTasks:[]
         };
     }
     
@@ -108,7 +115,8 @@ class App extends Component {
                 if(this.state.currentAssignment) {
                     this.LoadTasks(this.state.currentAssignment);
                 }
-                //this needs to be changed later
+                this.loadAssignments(r);
+                this.GetAllTasks();
             }, (error) => {
                 console.error(error);
             });
@@ -151,30 +159,142 @@ class App extends Component {
         let newAssignmentList = this.state.AssignmentList;
         newAssignmentList.push(record);
         this.setState({currentAssignment:id, AssignmentList: newAssignmentList});
+        this.handleRemoveSelect(id);
     }
 
     setSelectedAssignment(id) {
         this.setState({currentAssignment:id});
     }
-
+    removeFromList(type, id) {
+        if (type === 'assignment') {
+            let assignments = this.state.AssignmentList;
+            assignments.forEach(function(assignment){
+                if (assignment._id === id) {
+                    assignments.pop(assignment);
+                }
+            });
+            this.setState({AssignmentList:assignments});
+        } else {
+            let taskList = this.state.TaskList;
+            taskList.forEach(function(task){
+                if (task._id === id) {
+                    taskList.pop(task);
+                }
+            });
+            this.setState({TaskList:taskList});
+        }
+    }
     LoadTasks(Assignment_id) {
-        console.log("The current assignmentID: " + Assignment_id);
+        console.log('The current assignmentID: ' + Assignment_id);
         const LIMIT = 9999;
         const ToDos = skygear.Record.extend('ToDos');
         const query = new skygear.Query(ToDos);
         query.limit = LIMIT;
-        query.equalTo("AssignID", Assignment_id);
+        query.equalTo('AssignID', Assignment_id);
         skygear.privateDB.query(query).then((records) => {
-        console.log("Records: " + records);
         console.log(records.constructor);
         var r = Array.from(records);
-        console.log(Array.isArray(records));
-        console.log(Array.isArray(r));
-        console.log("Loaded records: " + r);
+        console.log('Loaded records: ' + r);
         this.setState({TaskList:r});
     }, (error) => {
         console.error(error);
     });
+    }
+
+    GetAllTasks() {
+        const LIMIT = 9999;
+        const ToDos = skygear.Record.extend('ToDos');
+        const query = new skygear.Query(ToDos);
+        query.limit = LIMIT;
+        query.equalTo('Overdue', false);
+        skygear.privateDB.query(query).then((records) => {
+        console.log(records.constructor);
+        var r = Array.from(records);
+        console.log('Loaded all records: ' + r);
+        this.setState({AllTasks:r});
+        this.loadSublistPushNotifDeadlines(r);
+    }, (error) => {
+        console.error(error);
+    });
+    }
+
+    loadSublistPushNotifDeadlines(records) {
+        for (var i=0; i<records.length; i++) {
+            var assignName = records[i].content;
+            var deadline = records[i].Deadline;
+            console.log('record: ' + records[i] + ' assignName: ' + assignName + ' deadline: ' + deadline );
+            if (!records[i].Overdue) {
+                this.setPushNotif(deadline, assignName, 'ToDos', records[i]._id, false);
+            }
+        }
+    }
+    loadAssignments(records) {
+        for (var i=0; i<records.length; i++) {
+            var assignName = records[i].Assignment;
+            var deadline = records[i].Deadline;
+            console.log('record: ' + records[i] + ' assignName: ' + assignName + 'deadline: ' + deadline );
+            if (!records[i].Overdue) {
+                this.setPushNotif(deadline, assignName, 'ToDos', records[i]._id, false);
+            }
+        }
+    }
+    setPushNotif(deadline, assignName, type, id, isnew) {
+        var dateVal = deadline.split('T')[0];
+        var timeVal = deadline.split('T')[1];
+        var hrVal = timeVal.split(':')[0];
+        var minVal = timeVal.split(':')[1];
+        var dueTime = new Date(dateVal);
+        dueTime.setHours(hrVal);
+        dueTime.setMinutes(minVal);
+
+        var currentTime = new Date();
+        console.log('the current time:' + currentTime);
+        console.log('due time: ' +  dueTime);
+        var timeDiff = dueTime - currentTime;
+        console.log('time diff: ' +  timeDiff);
+        if (timeDiff > 0) {
+            setTimeout(this.notifyMe(assignName), timeDiff);
+        } else if (timeDiff < 0 && !isnew) {
+            this.updateRecordByID(id, type, 'Overdue', true);
+        // document.getElementById(id).className = 'overdue';
+        }
+    }
+    updateRecordByID(id, type, coln, updateDetails) {
+        const ToDos = skygear.Record.extend('ToDos');
+        var query = new skygear.Query(ToDos);
+        if (type === 'Assignments') {
+            const Assignments = skygear.Record.extend('Assignments');
+            query = new skygear.Query(Assignments);
+        } 
+        query.equalTo('_id', id);
+        skygear.privateDB.query(query).then((records) => {
+            var rec = records[0];
+            console.log('the record returned by query: ' + rec);
+            rec[coln] = updateDetails;
+            return skygear.privateDB.save(rec);
+            }).then((records) => {
+            console.log('update success');
+            }, (error) => {
+            console.error(error);
+            });
+    }
+
+    notifyMe(task) {
+        if (!Notification) {
+            alert('Desktop notifications not available in your browser. Try Chromium.'); 
+            return;
+        }
+
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+        var notification = new Notification('Notification title', {
+            icon: './images/icon-todo-100.png',
+            body: 'Your assignment: ' + task + ' is due!',
+        });
+        notification.onclick = function () {
+            window.open('https://xiuwenlu.github.io/ToDoApp/');      
+        };
     }
 
     AddTaskToList(record) {
@@ -192,17 +312,19 @@ class App extends Component {
                     key={task.taskID} taskName={task.content} Deadline={task.Deadline} 
                     currentAssignment={this.state.currentAssignment}
                 > 
-                    <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}/>
+                    <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}
+                        removeFromList = {this.removeFromList}/>
                 </TaskCard>
                 )
             );
         }
     }
-    handleRemoveSelect() {
-        var elements = document.getElementsByClassName('selected');
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].classList.remove('selected');
+    handleRemoveSelect(id) {
+        let elements = document.getElementsByClassName('selected');
+        for (let i = 0; i < elements.length; i++) {
+            elements[i].className ='';
         }
+        document.getElementById(id).className = 'selected';
     }
     render() {
         const isSignup = this.state.signup;
@@ -225,11 +347,12 @@ class App extends Component {
                 LoadTasks={this.LoadTasks}
                 handleRemoveSelect={this.handleRemoveSelect}
             > 
-                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' id={assignment._id}/>
+                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' 
+                    id={assignment._id} removeFromList = {this.removeFromList}/>
             </AssignmentCard>
         );
 
-        const listTasts = this.DisplayTasks();
+        const listTasks = this.DisplayTasks();
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
@@ -237,15 +360,12 @@ class App extends Component {
             //Icon made by Freepik from www.flaticon.com
             user = username;
 
-            form = <AssignmentForm setAssignment={this.addCurrentAssignment} addTaskToList={this.AddTaskToList} 
-                        > 
+            form = <AssignmentForm setAssignment={this.addCurrentAssignment} 
+                        addTaskToList={this.AddTaskToList}> 
                         <AddTasks key='1' currentAssignment={this.state.currentAssignment}/> 
                         <AddAssignmentPopUp key='2'/>
                         {listAssignments}
-                        {listTasts}
-                        {/* <TaskCard key='5'>
-                            <DeleteAssignmentPopup key='6' type='task'/>
-                        </TaskCard> */}
+                        {listTasks}
                     </AssignmentForm>;
 
         } else if (isSignup && !loggedIn) {
