@@ -8,9 +8,10 @@ class AssignmentCard extends Component {
 
     constructor (props) {
         super(props)
-        this.state = { modalActive: true }
+        this.state = { modalActive: true, selected: false, assignmentID:this.props.assignmentID }
         this.openCard = this.openCard.bind(this);
         this.deleteCard = this.deleteCard.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     openCard() {
@@ -21,11 +22,19 @@ class AssignmentCard extends Component {
         this.setState({ modalActive: false });
     }
 
+    handleSelect() {
+        this.setState({selected:true});
+        this.props.setSelectedAssignment(this.state.assignmentID);
+        this.props.handleRemoveSelect();
+        document.getElementById(this.state.assignmentID).className = 'selected';
+        this.props.LoadTasks(this.state.assignmentID);
+    }
+
     render() {
         return(
-            <div>
+            <li id={this.state.assignmentID}  >
                 {this.state.modalActive && (
-                    <div id='assignment-card'>
+                    <div id='assignment-card' onClick={this.handleSelect}>
                         <div className='row'>
                             <div className='small-5 columns'>
                                 <h5>{this.props.assignName}</h5>
@@ -48,7 +57,7 @@ class AssignmentCard extends Component {
                         </div>
                     </div>
                 )}
-            </div>
+            </li>
         );
     }
 }

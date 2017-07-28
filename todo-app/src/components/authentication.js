@@ -3,7 +3,7 @@ import skygear from 'skygear';
 
 export function signup (username, password, passwordConf) {
   if (checkSignupInfo(username, password, passwordConf)) {
-    skygear.signupWithUsername(username, password).then((user) => {
+    skygear.auth.signupWithUsername(username, password).then((user) => {
         console.log(user); // user object
         alert('Welcome, signed up successfully!');
         // location.href = 'onboarding-prof.html';
@@ -57,7 +57,7 @@ export function checkLoginInfo(username, password) {
 
 export function login (username, password) {
   if (checkLoginInfo(username,password)) {
-    skygear.loginWithUsername(username, password).then((user) => {
+    skygear.auth.loginWithUsername(username, password).then((user) => {
       console.log(user); // user object
       // location.href = 'onboarding-prof.html';
       return true;
@@ -79,7 +79,7 @@ export function login (username, password) {
 }
 
 export function getUserName() {
-  skygear.whoami().then((user) => {
+  skygear.auth.whoami().then((user) => {
     var username = `${user.username}`;
     var span = document.createElement('SPAN');
     span.appendChild(document.createTextNode(username));
@@ -91,7 +91,7 @@ export function getUserName() {
 }
 
 export function logout () {
-  skygear.logout().then(() => {
+  skygear.auth.logout().then(() => {
     console.log('logout successfully');
     // location.href = "index.html";
   }, (error) => {

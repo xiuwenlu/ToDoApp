@@ -26,8 +26,8 @@ class AddTasks extends Component {
             const ToDos = skygear.Record.extend('ToDos'); 
             var record = new ToDos({
             "content" : this.state.taskName, 
-            "Deadline": this.state.Deadline, "Overdue": false
-            //"AssignID":currentAssignment
+            "Deadline": this.state.Deadline, "Overdue": false,
+            "AssignID":this.props.currentAssignment
             });
             skygear.privateDB.save(record).then((record) => {
                 console.log("This is how the record looks: " + record._id);

@@ -11,7 +11,7 @@
     "react-redux": "^5.0.5",
     "react-scripts": "1.0.10",
     "redux": "^3.7.2",
-    "skygear": "^0.24.1"
+    "skygear": "^1.0.0"
   },
   "scripts": {
     "predeploy": "npm run build",

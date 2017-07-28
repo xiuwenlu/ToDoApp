@@ -39,7 +39,8 @@ class TaskCard extends Component {
                         </div> 
                         <div className='large-2 columns' id='delete-task'>
                             {/* {this.props.children} */}
-                            {React.cloneElement(this.props.children, { deleteCard: this.deleteCard })}
+                            {React.cloneElement(this.props.children, 
+                                { deleteCard: this.deleteCard, currentAssignment: this.props.currentAssignment })}
                         </div> 
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import '../styles/App.css';
 
 
 class AssignmentForm extends Component {
-
+    
     render() {
         // const getPopUp = <addAssignmentPopUp />;
         return (
@@ -19,11 +19,11 @@ class AssignmentForm extends Component {
                         <div className='large-5 columns' >
                             {/* <button id='add-assign'data-open='exampleModal1'>+ Add</button> */}
                             {/* {this.props.children[1]} */}
-                            {React.cloneElement(this.props.children[1], { setAssignment: this.props.setAssignment})}
+                            {React.cloneElement(this.props.children[1], {setAssignment: this.props.setAssignment})}
                         </div>
                     </div>
                     <ul className='vertical tabs' data-tabs id='example-tabs'>
-                        {this.props.children[2]}
+                        {this.props.children[2]} 
                     </ul>
                 </div>
                 <div className='large-8 columns' id = 'subtask-container'>

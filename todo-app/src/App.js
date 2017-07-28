@@ -24,11 +24,12 @@ class App extends Component {
         this.handlePasswordConf = this.handlePasswordConf.bind(this);
         this.handleLoginSub= this.handleLoginSub.bind(this);
         this.handleSignupSub = this.handleSignupSub.bind(this);
-        this.setCurrentAssignment = this.setCurrentAssignment.bind(this);
+        this.addCurrentAssignment = this.addCurrentAssignment.bind(this);
         this.AddTaskToList = this.AddTaskToList.bind(this);
         this.LoadTasks = this.LoadTasks.bind(this);
         this.DisplayTasks = this.DisplayTasks.bind(this);
-
+        this.setSelectedAssignment = this.setSelectedAssignment.bind(this);
+        this.handleRemoveSelect = this.handleRemoveSelect.bind(this);
         this.state = {
             signup: true, 
             loggedIn: false,
@@ -61,7 +62,9 @@ class App extends Component {
             username: '',
             password: '',
             passwordConf: '',
-            AssignmentList: []
+            AssignmentList: [],
+            TaskList:[],
+            currentAssignment:null
         });
     }
 
@@ -79,7 +82,7 @@ class App extends Component {
     handleLoginSub() {
         
         if (checkLoginInfo(this.state.username,this.state.password)) {
-            skygear.loginWithUsername(this.state.username, this.state.password).then((user) => {
+            skygear.auth.loginWithUsername(this.state.username, this.state.password).then((user) => {
             console.log(user); // user object
             this.setState ({
                 loggedIn: true,
@@ -99,7 +102,7 @@ class App extends Component {
                 console.log(Array.isArray(r));
                 console.log(r);
                 if (records.length > 0) {
-                    this.setState ({currentAssignment: r[0]});
+                    this.setState ({currentAssignment: r[0]._id});                    
                 }
                 this.setState ({AssignmentList: r});
                 if(this.state.currentAssignment) {
@@ -123,7 +126,7 @@ class App extends Component {
     }
     handleSignupSub() {
         if (checkSignupInfo(this.state.username, this.state.password, this.state.passwordConf)) {
-            skygear.signupWithUsername(this.state.username, this.state.password).then((user) => {
+            skygear.auth.signupWithUsername(this.state.username, this.state.password).then((user) => {
                 console.log(user); // user object
                 alert('Welcome, signed up successfully!');
                 this.setState ({
@@ -143,11 +146,15 @@ class App extends Component {
             });
         }
     }
-    setCurrentAssignment(id, record) {
+    addCurrentAssignment(id, record) {
         console.log('yesss set assigment');
         let newAssignmentList = this.state.AssignmentList;
         newAssignmentList.push(record);
         this.setState({currentAssignment:id, AssignmentList: newAssignmentList});
+    }
+
+    setSelectedAssignment(id) {
+        this.setState({currentAssignment:id});
     }
 
     LoadTasks(Assignment_id) {
@@ -155,8 +162,8 @@ class App extends Component {
         const LIMIT = 9999;
         const ToDos = skygear.Record.extend('ToDos');
         const query = new skygear.Query(ToDos);
-        query.overallCount = true;
         query.limit = LIMIT;
+        query.equalTo("AssignID", Assignment_id);
         skygear.privateDB.query(query).then((records) => {
         console.log("Records: " + records);
         console.log(records.constructor);
@@ -182,12 +189,19 @@ class App extends Component {
             return (
                 this.state.TaskList.map((task) =>
                 <TaskCard 
-                    key={task.taskID} taskName={task.content} Deadline={task.Deadline}
+                    key={task.taskID} taskName={task.content} Deadline={task.Deadline} 
+                    currentAssignment={this.state.currentAssignment}
                 > 
                     <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}/>
                 </TaskCard>
                 )
             );
+        }
+    }
+    handleRemoveSelect() {
+        var elements = document.getElementsByClassName('selected');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].classList.remove('selected');
         }
     }
     render() {
@@ -205,12 +219,16 @@ class App extends Component {
             <AssignmentCard 
                 key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
                 courseName={assignment.Course} Deadline={assignment.Deadline}
+                assignmentID={assignment._id}
+                setSelectedAssignment={this.setSelectedAssignment}
+                currentAssignment={this.state.currentAssignment}
+                LoadTasks={this.LoadTasks}
+                handleRemoveSelect={this.handleRemoveSelect}
             > 
                 <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' id={assignment._id}/>
             </AssignmentCard>
         );
 
-        
         const listTasts = this.DisplayTasks();
 
         if(loggedIn) {
@@ -219,8 +237,9 @@ class App extends Component {
             //Icon made by Freepik from www.flaticon.com
             user = username;
 
-            form = <AssignmentForm setAssignment={this.setCurrentAssignment} addTaskToList={this.AddTaskToList}> 
-                        <AddTasks key='1' /> 
+            form = <AssignmentForm setAssignment={this.addCurrentAssignment} addTaskToList={this.AddTaskToList} 
+                        > 
+                        <AddTasks key='1' currentAssignment={this.state.currentAssignment}/> 
                         <AddAssignmentPopUp key='2'/>
                         {listAssignments}
                         {listTasts}
