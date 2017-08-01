@@ -37,7 +37,8 @@ class AddAssignmentPopUp extends Component {
         const Assignments = skygear.Record.extend('Assignments');
         var record = new Assignments({
         'Assignment' : this.state.assignName, 'Course' : this.state.courseName, 
-        'Deadline': this.state.Deadline, 'Overdue': false
+        'Deadline': this.state.Deadline, 'Overdue': false,
+        'Selected':false
         });
         record.AssignSeqNum = new skygear.Sequence();
         skygear.privateDB.save(record).then((record) => {

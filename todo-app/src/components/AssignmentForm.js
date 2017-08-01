@@ -23,7 +23,9 @@ class AssignmentForm extends Component {
                         </div>
                     </div>
                     <ul className='vertical tabs' data-tabs id='example-tabs'>
-                        {this.props.children[2]} 
+                        <div className='tabsBackground'>
+                            {this.props.children[2]} 
+                        </div>
                     </ul>
                 </div>
                 <div className='large-8 columns' id = 'subtask-container'>

@@ -29,7 +29,6 @@ button {
 	margin-bottom: 15px;
 	border-radius: 25px;
 	text-transform: uppercase;
-
 }
 
 button:hover {
@@ -62,6 +61,8 @@ ul {
 
 li:hover {
 	background: #e6f2ff;
+	cursor:pointer;
+
 }
 
 #heading {
@@ -206,10 +207,19 @@ li:hover {
 }
 
 .selected {
-	font-weight: bold;
-	color:white;
-	background-color: #0074D9;
+	padding: -3%;
+	margin-left: -1%;
+	margin-right: -1%;
+	text-align: left;
+	border-radius:5px;
+	padding-left: 6%;
+	height: 5%;
+	border: 1px solid #00c6b6;
+	background-color: white;
+	margin-bottom: 4px;
+
 }
+
 #user {
 	font-weight: bold;
 	text-transform: uppercase;
@@ -226,7 +236,8 @@ li:hover {
 }
 
 #example-tabs li {
-	padding: 7.5%;
+	padding: 3%;
+	margin-bottom: 2%;
 }
 
 #add-task {
@@ -247,11 +258,19 @@ li:hover {
 }
 #assign-heading button {
 	margin-right:1%; 
+	font-weight: bold;
+
 }
 #subtask-container h5 {
 	padding-top:3%;
 }
 
+.tabsBackground {
+	background-color: #f2f2f2;
+	padding: 3%;
+	margin-left: -6%;
+	margin-right: -6%;
+}
 .popup {
 	position:fixed;
 	top: 20%;
@@ -265,23 +284,29 @@ li:hover {
 	box-shadow: 0 0 50px rgba(0,0,0,0.5);
 	/* position: relative;  */
 }
-#assignment-card {
+.unselected {
 	border: 1px solid #e6e6e6;
+	background-color: white;
 	padding: 3%;
-	margin-left: -5%;
-	margin-right: -5%;
+	margin-left: -1%;
+	margin-right: -1%;
 	text-align: left;
 	border-radius:5px;
 	padding-left: 6%;
 	height: 10%;
+	margin-bottom: 4px;
 }
-#assignment-card button, #task-card button {
+
+.unselected h6, .selected h6 {
+	color: #888888;
+}
+.unselected button, #task-card button, .selected button {
 	background-color: transparent;
 	color: #e6e6e6;
 	width: 30%;
 	float: right;
 }
-#assignment-card h5 {
+.unselected h5 {
 	font-weight: 500;
 	text-transform: none;
 }
@@ -295,7 +320,7 @@ li:hover {
 	margin-bottom: 15px;
 	border-radius: 25px;
 	text-transform: uppercase;
-	font-weight: bold;
+	font-weight: bolder;
 	margin-left: 30%;
 }
 .cancel-delete {
@@ -327,4 +352,26 @@ li:hover {
 }
 .cancel-delete {
 	float:left !important;
+}
+
+.overdue {
+	border: 2px solid red;
+	text-align: center;
+	border-radius: 5px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color:red;
+	font-size: 12px;
+	margin-left: 20%;
+}
+.assign-info {
+	display:block;
+	text-align: left;
+}
+#due {
+	margin-left: -6%;
+}
+
+#dateDisplay{
+	margin-left: -8%;
 }

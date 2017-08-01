@@ -27,7 +27,10 @@ class AddTasks extends Component {
             var record = new ToDos({
             'content' : this.state.taskName, 
             'Deadline': this.state.Deadline, 'Overdue': false,
-            'AssignID':this.props.currentAssignment
+            'AssignID':this.props.currentAssignment,
+            'Completed': false,
+            'DateCompleted': '',
+            'Button': require('../images/gray-check.png')
             });
             skygear.privateDB.save(record).then((record) => {
                 console.log('This is how the record looks: ' + record._id);

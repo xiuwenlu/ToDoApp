@@ -49,7 +49,7 @@ class DeleteAssignmentPopup extends Component {
                 foundNotes = records;
                 var recsToDelete = [];
                 records.forEach(function(rec) {
-                recsToDelete.push(rec);
+                    recsToDelete.push(rec);
                 });
                 return skygear.privateDB.delete(recsToDelete); // return a Promise object
             } else {

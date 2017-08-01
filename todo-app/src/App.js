@@ -3,7 +3,8 @@ import skygear from 'skygear';
 import './App.css';
 import './styles/foundation.css';
 import './styles/App.css';
-import {logout, checkLoginInfo, checkSignupInfo, checkOverdue} from './components/authentication';
+import {logout, checkLoginInfo, checkSignupInfo, checkOverdue, updateRecordByID, loadSublistPushNotifDeadlines,
+        loadAssignments, setPushNotif } from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 import AssignmentForm from './components/AssignmentForm';
 import AddTasks from './components/addTasks';
@@ -32,9 +33,11 @@ class App extends Component {
         this.handleRemoveSelect = this.handleRemoveSelect.bind(this);
         this.removeFromList = this.removeFromList.bind(this);
         this.loadSublistPushNotifDeadlines = this.loadSublistPushNotifDeadlines.bind(this);
-        this.setPushNotif = this.setPushNotif.bind(this);
-        this.updateRecordByID = this.updateRecordByID.bind(this);
-        this.notifyMe = this.notifyMe.bind(this);
+        this.needUpdateOverdue = this.needUpdateOverdue.bind(this);
+        // this.updateRecordByID = this.updateRecordByID.bind(this);
+                // this.setPushNotif = this.setPushNotif.bind(this);
+
+        // this.notifyMe = this.notifyMe.bind(this);
 
         this.state = {
             signup: true, 
@@ -154,6 +157,47 @@ class App extends Component {
             });
         }
     }
+    loadSublistPushNotifDeadlines(records) {
+        for (var i=0; i<records.length; i++) {
+            var assignName = records[i].content;
+            var deadline = records[i].Deadline;
+            console.log('record: ' + records[i] + ' assignName: ' + assignName + ' deadline: ' + deadline );
+            if (!records[i].Overdue) {
+                setPushNotif(deadline, assignName, 'ToDos', records[i]._id, false);
+            }
+        }
+    }
+    loadAssignments(records) {
+        for (var i=0; i<records.length; i++) {
+            var assignName = records[i].Assignment;
+            var deadline = records[i].Deadline;
+            console.log('record: ' + records[i] + ' assignName: ' + assignName + 'deadline: ' + deadline );
+             
+            if (!records[i].Overdue) {
+                setPushNotif(deadline, assignName, 'Assignments', records[i]._id, false);
+            }
+            if (checkOverdue(deadline)) {
+                this.needUpdateOverdue(records[i]._id, "Assignment");
+            } 
+        }
+    }
+
+    needUpdateOverdue(id, type) {
+        let array = this.state.AssignmentList;
+        if (type === 'task') {
+             array = this.state.TaskList;
+        }
+        array.forEach(function(element) {
+            if (element._id === id) {
+                element.Overdue = true;
+            } 
+        });
+        if (type === 'task') {
+            this.setState({TaskList:array});
+        } else {
+            this.setState({AssignmentList:array});
+        }
+    }
     addCurrentAssignment(id, record) {
         console.log('yesss set assigment');
         let newAssignmentList = this.state.AssignmentList;
@@ -218,85 +262,6 @@ class App extends Component {
     });
     }
 
-    loadSublistPushNotifDeadlines(records) {
-        for (var i=0; i<records.length; i++) {
-            var assignName = records[i].content;
-            var deadline = records[i].Deadline;
-            console.log('record: ' + records[i] + ' assignName: ' + assignName + ' deadline: ' + deadline );
-            if (!records[i].Overdue) {
-                this.setPushNotif(deadline, assignName, 'ToDos', records[i]._id, false);
-            }
-        }
-    }
-    loadAssignments(records) {
-        for (var i=0; i<records.length; i++) {
-            var assignName = records[i].Assignment;
-            var deadline = records[i].Deadline;
-            console.log('record: ' + records[i] + ' assignName: ' + assignName + 'deadline: ' + deadline );
-            if (!records[i].Overdue) {
-                this.setPushNotif(deadline, assignName, 'ToDos', records[i]._id, false);
-            }
-        }
-    }
-    setPushNotif(deadline, assignName, type, id, isnew) {
-        var dateVal = deadline.split('T')[0];
-        var timeVal = deadline.split('T')[1];
-        var hrVal = timeVal.split(':')[0];
-        var minVal = timeVal.split(':')[1];
-        var dueTime = new Date(dateVal);
-        dueTime.setHours(hrVal);
-        dueTime.setMinutes(minVal);
-
-        var currentTime = new Date();
-        console.log('the current time:' + currentTime);
-        console.log('due time: ' +  dueTime);
-        var timeDiff = dueTime - currentTime;
-        console.log('time diff: ' +  timeDiff);
-        if (timeDiff > 0) {
-            setTimeout(this.notifyMe(assignName), timeDiff);
-        } else if (timeDiff < 0 && !isnew) {
-            this.updateRecordByID(id, type, 'Overdue', true);
-        // document.getElementById(id).className = 'overdue';
-        }
-    }
-    updateRecordByID(id, type, coln, updateDetails) {
-        const ToDos = skygear.Record.extend('ToDos');
-        var query = new skygear.Query(ToDos);
-        if (type === 'Assignments') {
-            const Assignments = skygear.Record.extend('Assignments');
-            query = new skygear.Query(Assignments);
-        } 
-        query.equalTo('_id', id);
-        skygear.privateDB.query(query).then((records) => {
-            var rec = records[0];
-            console.log('the record returned by query: ' + rec);
-            rec[coln] = updateDetails;
-            return skygear.privateDB.save(rec);
-            }).then((records) => {
-            console.log('update success');
-            }, (error) => {
-            console.error(error);
-            });
-    }
-
-    notifyMe(task) {
-        if (!Notification) {
-            alert('Desktop notifications not available in your browser. Try Chromium.'); 
-            return;
-        }
-
-        if (Notification.permission !== 'granted') {
-            Notification.requestPermission();
-        }
-        var notification = new Notification('Notification title', {
-            icon: './images/icon-todo-100.png',
-            body: 'Your assignment: ' + task + ' is due!',
-        });
-        notification.onclick = function () {
-            window.open('https://xiuwenlu.github.io/ToDoApp/');      
-        };
-    }
-
     AddTaskToList(record) {
         console.log('yesss add task to list');
         let newTaskList = this.state.TaskList;
@@ -311,6 +276,11 @@ class App extends Component {
                 <TaskCard 
                     key={task.taskID} taskName={task.content} Deadline={task.Deadline} 
                     currentAssignment={this.state.currentAssignment}
+                    Overdue={task.Overdue}
+                    Completed={task.Completed}
+                    Button={task.Button}
+                    DateCompleted={task.DateCompleted}
+                    id={task._id}
                 > 
                     <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}
                         removeFromList = {this.removeFromList}/>
@@ -322,9 +292,23 @@ class App extends Component {
     handleRemoveSelect(id) {
         let elements = document.getElementsByClassName('selected');
         for (let i = 0; i < elements.length; i++) {
-            elements[i].className ='';
+            elements[i].className ='unselected';
         }
         document.getElementById(id).className = 'selected';
+
+        let assignList = this.state.AssignmentList;
+        assignList.forEach(function(assignment) {
+            if (assignment._id !== id) {
+                assignment.Selected = false;
+            } else {
+                console.log(assignment.Selected + "was this");
+
+                assignment.Selected = true;
+                console.log(id + "selected");
+                console.log(assignment.Selected + "noew this");
+            }
+        });
+        this.setState({AssignmentList: assignList});
     }
     render() {
         const isSignup = this.state.signup;
@@ -342,6 +326,8 @@ class App extends Component {
                 key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
                 courseName={assignment.Course} Deadline={assignment.Deadline}
                 assignmentID={assignment._id}
+                selected={assignment.Selected}
+                Overdue={assignment.Overdue}
                 setSelectedAssignment={this.setSelectedAssignment}
                 currentAssignment={this.state.currentAssignment}
                 LoadTasks={this.LoadTasks}

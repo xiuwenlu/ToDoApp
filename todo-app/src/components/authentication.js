@@ -118,3 +118,61 @@ export function checkOverdue(deadline) {
     return false;
   }
 }
+
+export function updateRecordByID(id, type, coln, updateDetails) {
+      const ToDos = skygear.Record.extend('ToDos');
+      var query = new skygear.Query(ToDos);
+      if (type === 'Assignments') {
+          const Assignments = skygear.Record.extend('Assignments');
+          query = new skygear.Query(Assignments);
+      } 
+      query.equalTo('_id', id);
+      skygear.privateDB.query(query).then((records) => {
+          var rec = records[0];
+          console.log('the record returned by query: ' + rec);
+          rec[coln] = updateDetails;
+          return skygear.privateDB.save(rec);
+          }).then((records) => {
+          console.log('update success');
+          }, (error) => {
+          console.error(error);
+          });
+  }
+
+  export function setPushNotif(deadline, assignName, type, id, isnew) {
+        var dateVal = deadline.split('T')[0];
+        var timeVal = deadline.split('T')[1];
+        var hrVal = timeVal.split(':')[0];
+        var minVal = timeVal.split(':')[1];
+        var dueTime = new Date(dateVal);
+        dueTime.setHours(hrVal);
+        dueTime.setMinutes(minVal);
+
+        var currentTime = new Date();
+        console.log('the current time:' + currentTime);
+        console.log('due time: ' +  dueTime);
+        var timeDiff = dueTime - currentTime;
+        console.log('time diff: ' +  timeDiff);
+        if (timeDiff > 0) {
+            setTimeout(notifyMe(assignName), timeDiff);
+        } else if (timeDiff < 0 && !isnew) {
+            updateRecordByID(id, type, 'Overdue', true);
+        }
+    }
+  
+    export function notifyMe(task) {
+        if (!Notification) {
+            alert('Desktop notifications not available in your browser. Try Chromium.'); 
+            return;
+        }
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+        var notification = new Notification('Notification title', {
+            icon: './images/icon-todo-100.png',
+            body: 'Your assignment: ' + task + ' is due!',
+        });
+        notification.onclick = function () {
+            window.open('https://xiuwenlu.github.io/ToDoApp/');      
+        };
+    }
