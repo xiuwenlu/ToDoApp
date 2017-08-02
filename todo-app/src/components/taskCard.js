@@ -11,11 +11,11 @@ class TaskCard extends Component {
         super(props)
         this.state = { modalActive: true,
                        image: this.props.Button,
-                       alert: this.props.DateCompleted,
+                       dateCompleted: this.props.DateCompleted,
                        completed: this.props.Completed,
-                       Overdue: this.props.Overdue
+                       Overdue: this.props.Overdue,
                        //need to save these states in the database and initialize them base on them.
-                    }
+                     }
         this.openModal = this.openModal.bind(this);
         this.deleteCard = this.deleteCard.bind(this);
         this.handleCompleteTask = this.handleCompleteTask.bind(this);
@@ -31,8 +31,7 @@ class TaskCard extends Component {
     handleCompleteTask() {
         if (!this.state.completed && !checkOverdue(this.props.Deadline)) {
             let completeDate = new Date();
-            completeDate = "Completed On " + completeDate;
-            this.setState({image:require('../images/black-check.png'), alert: completeDate, completed:true});
+            this.setState({image:require('../images/black-check.png'), completed:true, dateCompleted:completeDate});
             updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
             updateRecordByID(this.props.id, 'ToDos', 'DateCompleted', completeDate);
             updateRecordByID(this.props.id, 'ToDos', 'Button', require('../images/black-check.png'));
@@ -41,29 +40,48 @@ class TaskCard extends Component {
     }
 
     render() {
-        let alert = this.state.alert;
+        let alert = '';
         let image = this.state.image;
-        if (!this.state.completed && checkOverdue(this.props.Deadline) && !this.state.Overdue) {
+        let className = '';
+        let completedTitle = '';
+        let completedClass ='';
+        if (!this.state.completed && checkOverdue(this.props.Deadline)) {
             alert = "Overdue";
-            updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);
+            className = alert;
+            if (!this.state.Overdue) {
+               updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);
+            }
+        } else if (this.state.completed) {
+            completedTitle = 'Compeleted On';
+            completedClass = 'completed';
+            let date = this.state.dateCompleted;
+            date = date.toString();
+            console.log("today's date" + date);
+            alert = date.split(" ")[1] + ' ' + date.split(" ")[2] +' ' + date.split(" ")[3];
+            image = require('../images/black-check.png');
         }
         
         return(
             this.state.modalActive && (
-                <div id='task-card'>
+                <div key={this.props.id} id='task-card'>
                     <div className='row'>
                         <div className='large-2 columns'>
                             <button id='task-completed' onClick={this.handleCompleteTask}><img src={image} alt=''></img></button>
                         </div>
                         <div className='large-6 columns'>
-                            <div>{this.props.taskName}</div>
-                            <div>{this.props.Deadline}</div>
+                            <h5> {this.props.taskName}</h5>
+                            <div className='large-5 columns' id='due'>
+                                <h6>Due Date</h6>  
+                            </div>
+                            <div className='large-8 columns'id='dateDisplay'>
+                                <p>{this.props.Deadline}</p>
+                            </div>
                         </div>
                         <div className='large-2 columns'>
-                            {alert}
+                            <p className={completedClass}>{completedTitle}</p>
+                            <p className={className} id='task-alert'>{alert}</p>
                         </div> 
                         <div className='large-2 columns' id='delete-task'>
-                            {/* {this.props.children} */}
                             {React.cloneElement(this.props.children, 
                                 { deleteCard: this.deleteCard, currentAssignment: this.props.currentAssignment })}
                         </div> 

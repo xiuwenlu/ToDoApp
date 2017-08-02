@@ -41,7 +41,14 @@ class AssignmentCard extends Component {
     }
 
     render() {
-        let overdue = this.state.Overdue ? 'Overdue' : '';
+        let overdue = '';
+
+        if (checkOverdue(this.props.Deadline)) {
+            overdue = 'Overdue';
+            if (!this.state.Overdue) {
+                updateRecordByID(this.state.assignmentID, "Assignments", "Overdue", true);
+            }
+        }
         if (!this.state.Overdue && !checkOverdue(this.props.Deadline)) {
             let deadline = this.props.Deadline;
             var dateVal = deadline.split('T')[0];
@@ -88,12 +95,12 @@ class AssignmentCard extends Component {
                                 <div className='large-5 columns' id='due'>
                                      <h6>Due Date</h6>  
                                 </div>
-                                <div className='large-8 columns'id='dateDisplay'>
+                                <div className='large-8 columns' id='date-display'>
                                     {this.props.Deadline}
                                 </div>
                             </div>
                             <div className='large-4 columns'>
-                                <p className="overdue">{overdue}</p>
+                                <p className={overdue}>{overdue}</p>
                             </div>  
                         </div>
                     </div>

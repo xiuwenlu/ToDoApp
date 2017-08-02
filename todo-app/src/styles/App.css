@@ -39,7 +39,7 @@ ul {
 	list-style: none;
 }
 
-.tasks ul li {
+.task-list li {
     background-color: white;
     position: relative;
     /*padding: 20px 20px 20px 20px;*/
@@ -50,19 +50,17 @@ ul {
     font-size: 18px;
     transition: 0.2s;
     border:1px solid #D8D8D8;
-    color: #888888;
-    box-shadow: 3px 3px 3px #888888;
+    color: black;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
-    cursor:pointer;
+	user-select: none;
+	margin-bottom: 1%;
 }
-
-li:hover {
-	background: #e6f2ff;
-	cursor:pointer;
-
+#tasks {
+	text-align: left;
+	padding-left: 10%;
+	padding-top: 3%;
 }
 
 #heading {
@@ -159,7 +157,7 @@ li:hover {
 	margin-right:25%;
 }
 
-#task-list {
+.task-list {
 	margin-top: 5%;
 }
 
@@ -170,7 +168,7 @@ li:hover {
 	cursor: pointer;
 	text-align: left;
 }
-#tasks {
+#task-list {
 	margin: 5%;
 	margin-left: 10%;
 }
@@ -347,6 +345,10 @@ li:hover {
 	border-radius: 5px;
 	text-align: left;
 }
+#task-card p {
+	font-size: 14px;
+	margin-left: -25%;
+}
 #task-completed, #cancel-add {
 	float:left !important;
 }
@@ -354,7 +356,7 @@ li:hover {
 	float:left !important;
 }
 
-.overdue {
+.Overdue {
 	border: 2px solid red;
 	text-align: center;
 	border-radius: 5px;
@@ -364,14 +366,42 @@ li:hover {
 	font-size: 12px;
 	margin-left: 20%;
 }
+.Today {
+	border: 2px solid #00c6b6;
+	text-align: center;
+	border-radius: 5px;
+	text-transform: uppercase;
+	font-weight: bold;
+	color:#00c6b6;
+	font-size: 12px;
+	margin-left: 20%;
+}
+
 .assign-info {
 	display:block;
 	text-align: left;
 }
 #due {
-	margin-left: -6%;
+	margin-left: -5%;
+	color: #888888
 }
 
 #dateDisplay{
 	margin-left: -8%;
+}
+#task-completed, #task-alert {
+	margin-top: 20%;
+}
+
+#delete-task {
+	margin-top: 3%;
+}
+.completed {
+	color: #888888;
+	font-size: 13px;
+	margin-top: 20%;
+	margin-left: -20%;
+}
+#date-display {
+	margin-top: -11%;
 }
