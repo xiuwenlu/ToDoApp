@@ -39,7 +39,7 @@ ul {
 	list-style: none;
 }
 
-.task-list li {
+#task-list li {
     background-color: white;
     position: relative;
     /*padding: 20px 20px 20px 20px;*/
@@ -157,7 +157,7 @@ ul {
 	margin-right:25%;
 }
 
-.task-list {
+#task-list {
 	margin-top: 5%;
 }
 
@@ -387,21 +387,29 @@ ul {
 }
 
 #dateDisplay{
-	margin-left: -8%;
+	margin-left: -10%;
+	margin-top: 1px; 
 }
-#task-completed, #task-alert {
-	margin-top: 20%;
+#task-completed{
+	margin-top: 40%;
 }
 
 #delete-task {
-	margin-top: 3%;
+	margin-top: 4%;
 }
 .completed {
-	color: #888888;
-	font-size: 13px;
-	margin-top: 20%;
+	 color: #888888;
+	font-size: 13.5px !important;
+	margin-top: 35%;
 	margin-left: -20%;
 }
 #date-display {
 	margin-top: -11%;
+}
+.completed-date {
+	margin-top: -20%
+}
+
+.task-title {
+	margin-top: 5%;
 }

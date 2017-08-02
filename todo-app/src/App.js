@@ -278,7 +278,7 @@ class App extends Component {
                     currentAssignment={this.state.currentAssignment}
                     Overdue={task.Overdue}
                     Completed={task.Completed}
-                    Button={task.Button}
+                    Image={task.Image}
                     DateCompleted={task.DateCompleted}
                     id={task._id}
                 > 

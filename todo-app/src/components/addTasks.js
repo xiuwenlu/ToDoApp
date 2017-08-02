@@ -30,7 +30,7 @@ class AddTasks extends Component {
             'AssignID':this.props.currentAssignment,
             'Completed': false,
             'DateCompleted': '',
-            'Button': require('../images/gray-check.png')
+            'Image': false
             });
             skygear.privateDB.save(record).then((record) => {
                 console.log('This is how the record looks: ' + record._id);

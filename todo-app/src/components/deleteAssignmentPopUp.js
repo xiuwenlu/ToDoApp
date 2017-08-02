@@ -33,7 +33,6 @@ class DeleteAssignmentPopup extends Component {
             console.log(record);
             console.log('Delete '+ this.props.type +' successfully!');
             this.props.deleteCard();
-            // this.props.reload();
             this.props.removeFromList(this.props.type, this.props.id);
         }, (error) => {
             console.error(error);
@@ -52,6 +51,7 @@ class DeleteAssignmentPopup extends Component {
                 records.forEach(function(rec) {
                     recsToDelete.push(rec);
                 });
+                document.getElementById('task-list').innerHTML = '';
                 return skygear.privateDB.delete(recsToDelete); // return a Promise object
             } else {
                 console.log('There were not any to-dos for this assignment.');
@@ -66,7 +66,6 @@ class DeleteAssignmentPopup extends Component {
                 });
             } else {
                 console.log('Delete successfully!');
-                document.getElementById('task-list').innerHTML = '';
             }
             }, (reqError) => {
             console.error('Request error', reqError);
