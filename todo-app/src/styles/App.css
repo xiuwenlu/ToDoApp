@@ -79,6 +79,11 @@ ul {
 	padding-bottom: 2%;
 	padding-left: 5%;
 	padding-right:5%;
+	width: 100%;
+	/* position:fixed; */
+}
+.row {
+	max-width: 100rem;
 }
 .top-bar button {
 	font-size: 15px;
@@ -102,9 +107,11 @@ ul {
 	background: transparent;
 }
 #assignments {
-	margin-top: 5%;
+	/* position: fixed; */
+	margin-bottom: -5%;  
 	border: 3px solid white;
-	margin-bottom: 3%;
+	border-radius:5px;
+	width: 100% !important;
 }
 #example-tabs, #assignments {
 	background-color: transparent;
@@ -127,6 +134,7 @@ ul {
 	margin-right:15%;
 	padding: 4%;
 	border: 2px solid #e6e6e6;
+	border-radius: 5px;
 	background-color: white;
 	text-align: left;
 	font-weight: bold;
@@ -176,6 +184,7 @@ ul {
 
 #add-assignment {
 	border: 3px solid white;
+	border-radius: 3px;
 	text-align: left;
 	margin-right: 20%;
 	margin-top: 5%;
@@ -253,6 +262,7 @@ ul {
 	padding: 2%;
 	background-color: white;
 	border: 1px solid #e6e6e6;
+	border-radius: 5px;
 	padding-bottom: 1%;
 }
 #assign-heading button {
@@ -279,6 +289,7 @@ ul {
 	padding-right: 60px;  
 	background: #fff;
 	border: 1px solid #e6e6e6;
+	border-radius: 3px;
 	width: 700px ;
 	box-shadow: 0 0 50px rgba(0,0,0,0.5);
 	/* position: relative;  */
@@ -332,6 +343,7 @@ ul {
 	text-align: center;
 	width: 450px;
 	left: 35%;
+	border-radius: 3px;
 
 }
 #delete-assign-pop h6 {
@@ -374,7 +386,7 @@ ul {
 	margin-top:45%;
 	font-size: 10px;
 }
-.Today {
+.Today, .Today-task {
 	border: 2px solid #00c6b6;
 	text-align: center;
 	border-radius: 5px;
@@ -383,6 +395,9 @@ ul {
 	color:#00c6b6;
 	font-size: 12px;
 	margin-left: 20%;
+}
+.Today-task {
+	margin-top:45%;
 }
 
 .assign-info {
@@ -406,7 +421,7 @@ ul {
 	margin-top: 5%;
 }
 .completed {
-	 color: #888888;
+	color: #888888;
 	font-size: 13.5px !important;
 	margin-top: 35%;
 	margin-left: -20%;

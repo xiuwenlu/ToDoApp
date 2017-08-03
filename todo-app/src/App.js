@@ -525,7 +525,9 @@ class App extends Component {
                         </ul>
                     </div>
                 </div>
-                {form}
+                <div className='form'>
+                    {form}
+                </div>
             </div>
         );
     }

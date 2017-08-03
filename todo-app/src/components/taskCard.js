@@ -58,6 +58,26 @@ class TaskCard extends Component {
             alert = date.split(" ")[1] + ' ' + date.split(" ")[2] +' ' + date.split(" ")[3];
             image = require('../images/black-check.png');
             className = 'completed-date';
+        } else if (!this.state.Overdue && !checkOverdue(this.props.Deadline)) {
+            let deadline = this.props.Deadline;
+            var dateVal = deadline.split('T')[0];
+            var timeVal = deadline.split('T')[1];
+            var hrVal = timeVal.split(':')[0];
+            var minVal = timeVal.split(':')[1];
+            var dueTime = new Date(dateVal);
+            dueTime.setHours(hrVal);
+            dueTime.setMinutes(minVal);
+            let today = new Date();
+            let currentDate = today.toString();
+            currentDate = currentDate.split(' ')[2];
+            var timeDiff = dueTime - today;
+
+            if (timeDiff <= 86400000) {               
+                if (dateVal.split('-')[2] === currentDate) {
+                    alert = "Today";
+                    className = "Today-task";
+                }
+            }
         }
         
         return(
