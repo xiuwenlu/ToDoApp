@@ -26,6 +26,7 @@ class AssignmentCard extends Component {
     }
 
     deleteCard() {
+        console.log('deleteCard', this.props.assignmentID);
         this.setState({ modalActive: false });
     }
 
@@ -69,6 +70,8 @@ class AssignmentCard extends Component {
                 }
             }
         }
+
+        console.log('card render', this.props.assignmentID, this.state.modalActive);
     
         return(
             this.state.modalActive && (

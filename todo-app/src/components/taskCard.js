@@ -47,7 +47,7 @@ class TaskCard extends Component {
         let completedClass ='';
         if (!this.state.completed && checkOverdue(this.props.Deadline)) {
             alert = "Overdue";
-            className = alert;
+            className = "Overdue-task";
             if (!this.state.Overdue) {
                updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);
             }

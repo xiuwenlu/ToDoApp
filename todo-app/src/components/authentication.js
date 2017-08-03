@@ -154,13 +154,13 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         var timeDiff = dueTime - currentTime;
         console.log('time diff: ' +  timeDiff);
         if (timeDiff > 0) {
-            setTimeout(notifyMe(assignName), timeDiff);
+            setTimeout(function(assignName, type) {notifyMe(assignName, type)}, timeDiff);
         } else if (timeDiff < 0 && !isnew) {
             updateRecordByID(id, type, 'Overdue', true);
         }
     }
   
-    export function notifyMe(task) {
+    export function notifyMe(task, type) {
         if (!Notification) {
             alert('Desktop notifications not available in your browser. Try Chromium.'); 
             return;
@@ -168,9 +168,13 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         if (Notification.permission !== 'granted') {
             Notification.requestPermission();
         }
-        var notification = new Notification('Notification title', {
+        let label = 'assignment';
+        if(type === 'ToDos') {
+          label = 'task';
+        }
+        var notification = new Notification('You have a(n) ' + label + ' due', {
             icon: './images/icon-todo-100.png',
-            body: 'Your assignment: ' + task + ' is due!',
+            body: 'Your ' + label +': ' + task + ' is due!',
         });
         notification.onclick = function () {
             window.open('https://xiuwenlu.github.io/ToDoApp/');      

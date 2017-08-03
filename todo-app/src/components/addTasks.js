@@ -20,7 +20,9 @@ class AddTasks extends Component {
     }
 
     addTask() {
-        if (!this.state.taskName || !this.state.Deadline) {
+        if (this.props.currentAssignment === '') {
+            alert('Please select an assignment first!')
+        } else if (!this.state.taskName || !this.state.Deadline) {
             alert('Please enter all fields!');
         } else {
             const ToDos = skygear.Record.extend('ToDos'); 

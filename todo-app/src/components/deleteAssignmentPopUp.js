@@ -32,7 +32,7 @@ class DeleteAssignmentPopup extends Component {
         }).then((record) => {
             console.log(record);
             console.log('Delete '+ this.props.type +' successfully!');
-            this.props.deleteCard();
+            // this.props.deleteCard();
             this.props.removeFromList(this.props.type, this.props.id);
         }, (error) => {
             console.error(error);

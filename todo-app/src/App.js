@@ -228,7 +228,7 @@ class App extends Component {
             if (records.length > 0) {
                 // localStorage.setItem('currentAssignment', r[0]._id);
                 // this.setState ({currentAssignment: localStorage.getItem('currentAssignment')});
-                this.setState ({currentAssignment: r[0]._id});                   
+                this.setState ({currentAssignment: r[0]._id});
             }
             localStorage.setItem('AssignmentList', r);
             // this.setState ({AssignmentList: localStorage.getItem('AssignmentList')});
@@ -286,7 +286,7 @@ class App extends Component {
         if (type === 'task') {
             localStorage.setItem("TaskList", array);
             // this.setState({TaskList:localStorage.getItem("TaskList")});
-                        this.setState({TaskList:array});
+            this.setState({TaskList:array});
 
         } else {
             localStorage.setItem("AssignmentList", array);
@@ -316,25 +316,24 @@ class App extends Component {
         this.setState({currentAssignment:id});
     }
     removeFromList(type, id) {
+        console.log('removeFromList', type, id);
         if (type === 'assignment') {
             let assignments = this.state.AssignmentList;
-            assignments.forEach(function(assignment){
-                if (assignment._id === id) {
-                    assignments.pop(assignment);
-                }
-            });
-            localStorage.setItem("AssignmentList", assignments);
+            console.log('removeFromList 1', assignments);
+            assignments = assignments.filter((assignment) => assignment._id !== id);
+            // localStorage.setItem("AssignmentList", assignments);
             // this.setState({AssignmentList:localStorage.getItem("AssignmentList")});
             this.setState({AssignmentList:assignments});
+            console.log('removeFromList 2', assignments);
         } else {
             let taskList = this.state.TaskList;
-            taskList.forEach(function(task){
-                if (task._id === id) {
-                    taskList.pop(task);
-                }
-            });
-            localStorage.setItem("TaskList", taskList);
-
+            // taskList.forEach(function(task){
+            //     if (task._id === id) {
+            //         taskList.pop(task);
+            //     }
+            // });
+            taskList = taskList.filter((task) => task._id !== id);
+            // localStorage.setItem("TaskList", taskList);
             // this.setState({TaskList:localStorage.getItem("TaskList")});
             this.setState({TaskList:taskList});
 
@@ -451,10 +450,12 @@ class App extends Component {
             let listAssignments = null;
             let assignmentList = this.state.AssignmentList;
 
+            console.log('render', assignmentList);
+
             if(assignmentList) {
                 listAssignments = assignmentList.map((assignment) =>
                     <AssignmentCard 
-                        key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
+                        key={assignment._id} assignName={assignment.Assignment} 
                         courseName={assignment.Course} Deadline={assignment.Deadline}
                         assignmentID={assignment._id}
                         selected={assignment.Selected}
