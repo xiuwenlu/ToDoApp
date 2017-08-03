@@ -31,7 +31,7 @@ class AddTasks extends Component {
             'Deadline': this.state.Deadline, 'Overdue': false,
             'AssignID':this.props.currentAssignment,
             'Completed': false,
-            'DateCompleted': '',
+            'CompletedDate': '',
             'Image': false
             });
             skygear.privateDB.save(record).then((record) => {

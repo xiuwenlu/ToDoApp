@@ -109,8 +109,8 @@ export function checkOverdue(deadline) {
   dueTime.setMinutes(minVal);
 
   const currentTime = new Date();
-  console.log('the current time:' + currentTime);
-  console.log('due time: ' +  dueTime);
+  // console.log('the current time:' + currentTime);
+  // console.log('due time: ' +  dueTime);
   const timeDiff = dueTime - currentTime;
   if (timeDiff <= 0) {
       return true;
@@ -149,10 +149,10 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         dueTime.setMinutes(minVal);
 
         var currentTime = new Date();
-        console.log('the current time:' + currentTime);
-        console.log('due time: ' +  dueTime);
+        // console.log('the current time:' + currentTime);
+        // console.log('due time: ' +  dueTime);
         var timeDiff = dueTime - currentTime;
-        console.log('time diff: ' +  timeDiff);
+        // console.log('time diff: ' +  timeDiff);
         if (timeDiff > 0) {
             setTimeout(function(assignName, type) {notifyMe(assignName, type)}, timeDiff);
         } else if (timeDiff < 0 && !isnew) {

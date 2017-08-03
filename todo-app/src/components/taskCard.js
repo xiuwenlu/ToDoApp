@@ -11,7 +11,7 @@ class TaskCard extends Component {
         super(props)
         this.state = { modalActive: true,
                        image: this.props.Image,
-                       dateCompleted: this.props.DateCompleted,
+                       dateCompleted: this.props.CompletedDate,
                        completed: this.props.Completed,
                        Overdue: this.props.Overdue,
                      }
@@ -33,17 +33,17 @@ class TaskCard extends Component {
             completeDate = completeDate.toString();
             this.setState({image:true, completed:true, dateCompleted:completeDate});
             updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
-            updateRecordByID(this.props.id, 'ToDos', 'DateCompleted', completeDate);
+            updateRecordByID(this.props.id, 'ToDos', 'CompletedDate', completeDate);
             updateRecordByID(this.props.id, 'ToDos', 'Image', true);
             updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);    
         }
     }
 
     render() {
-        let alert = '';
+        let alert ='';
         let image = this.state.image ? require('../images/black-check.png') : require('../images/gray-check.png')
-        let className = '';
-        let completedTitle = '';
+        let className ='';
+        let completedTitle ='';
         let completedClass ='';
         if (!this.state.completed && checkOverdue(this.props.Deadline)) {
             alert = "Overdue";
@@ -55,7 +55,6 @@ class TaskCard extends Component {
             completedTitle = 'Compeleted On';
             completedClass = 'completed';
             let date = this.state.dateCompleted;
-            console.log("today's date" + date);
             alert = date.split(" ")[1] + ' ' + date.split(" ")[2] +' ' + date.split(" ")[3];
             image = require('../images/black-check.png');
             className = 'completed-date';
@@ -65,23 +64,23 @@ class TaskCard extends Component {
             this.state.modalActive && (
                 <div key={this.props.id} id='task-card'>
                     <div className='row'>
-                        <div className='large-2 columns'>
+                        <div className='small-2 columns'>
                             <button id='task-completed' onClick={this.handleCompleteTask}><img src={image} alt=''></img></button>
                         </div>
-                        <div className='large-6 columns'>
+                        <div className='small-6 columns'>
                             <h5 className='task-title'> {this.props.taskName}</h5>
-                            <div className='large-5 columns' id='due'>
+                            <div className='small-5 columns' id='due'>
                                 <h6>Due Date</h6>  
                             </div>
-                            <div className='large-8 columns'id='dateDisplay'>
+                            <div className='small-8 columns'id='dateDisplay'>
                                 <p>{this.props.Deadline}</p>
                             </div>
                         </div>
-                        <div className='large-2 columns'>
+                        <div className='small-2 columns'>
                             <p className={completedClass}>{completedTitle}</p>
                             <p className={className} >{alert}</p>
                         </div> 
-                        <div className='large-2 columns' id='delete-task'>
+                        <div className='small-2 columns' id='delete-task'>
                             {React.cloneElement(this.props.children, 
                                 { deleteCard: this.deleteCard, currentAssignment: this.props.currentAssignment })}
                         </div> 

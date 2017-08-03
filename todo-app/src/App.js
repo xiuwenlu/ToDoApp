@@ -44,7 +44,7 @@ class App extends Component {
             loggedIn:localStorage.getItem('loggedIn') || false,
             signupSubmit:localStorage.getItem('signupSubmit') || false,
             loginSubmit:localStorage.getItem('loginSubmit') || false,
-            username: localStorage.getItem('username') || null,
+            username: localStorage.getItem('username') || '',
             password: '',
             passwordConf:'',
             AssignmentList: [],
@@ -396,7 +396,7 @@ class App extends Component {
                         Overdue={task.Overdue}
                         Completed={task.Completed}
                         Image={task.Image}
-                        DateCompleted={task.DateCompleted}
+                        CompletedDate={task.CompletedDate}
                         LoadTasks={this.LoadTasks}
                         id={task._id}
                     > 
@@ -487,7 +487,6 @@ class App extends Component {
                         {listAssignments}
                         {listTasks}
                     </AssignmentForm>;
-
         } else if (isSignup && !loggedIn) {
             button = <SignupButton onClick={this.handleSignUpClick} />;
             form = <LoginForm login={this.handleLoginSub}

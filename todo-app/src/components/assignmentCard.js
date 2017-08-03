@@ -86,23 +86,23 @@ class AssignmentCard extends Component {
                     </div>
                     <div className='assign-info'>
                         <div className='row'>
-                            <div className='large-4 columns'>
+                            <div className='small-4 columns'>
                                 <h6>Course</h6> 
                             </div>
-                            <div className='large-8 columns'>
+                            <div className='small-8 columns'>
                                 {this.props.courseName}
                             </div>
                         </div>
                         <div className='row'>
-                            <div className='large-10 columns'>
-                                <div className='large-5 columns' id='due'>
+                            <div className='small-10 columns'>
+                                <div className='small-5 columns' id='due'>
                                      <h6>Due Date</h6>  
                                 </div>
-                                <div className='large-8 columns' id='date-display'>
+                                <div className='small-8 columns' id='date-display'>
                                     {this.props.Deadline}
                                 </div>
                             </div>
-                            <div className='large-4 columns'>
+                            <div className='small-4 columns'>
                                 <p className={overdue}>{overdue}</p>
                             </div>  
                         </div>
