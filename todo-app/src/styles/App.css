@@ -436,3 +436,6 @@ ul {
 .task-title {
 	margin-top: 5%;
 }
+.completed-tasks {
+	background-color: #888888;
+}

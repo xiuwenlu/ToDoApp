@@ -129,7 +129,7 @@ export function updateRecordByID(id, type, coln, updateDetails) {
       query.equalTo('_id', id);
       skygear.privateDB.query(query).then((records) => {
           var rec = records[0];
-          console.log('the record returned by query: ' + rec);
+          console.log('update details: ' + updateDetails);
           rec[coln] = updateDetails;
           return skygear.privateDB.save(rec);
           }).then((records) => {

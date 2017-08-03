@@ -31,7 +31,8 @@ class TaskCard extends Component {
         if (!this.state.completed && !checkOverdue(this.props.Deadline)) {
             let completeDate = new Date()
             completeDate = completeDate.toString();
-            this.setState({image:true, completed:true, dateCompleted:completeDate});
+            // document.getElementsBy(this.props.id).className = 'completed-tasks';
+            this.setState({image:true, completed:true, dateCompleted:completeDate, Overdue: true});
             updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
             updateRecordByID(this.props.id, 'ToDos', 'CompletedDate', completeDate);
             updateRecordByID(this.props.id, 'ToDos', 'Image', true);
