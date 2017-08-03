@@ -36,7 +36,7 @@ class AssignmentCard extends Component {
         // this.setState({selected:true});
         this.props.setSelectedAssignment(this.state.assignmentID);
         this.props.handleRemoveSelect(this.state.assignmentID);
-        // document.getElementById(this.state.assignmentID).className = 'selected';
+        document.getElementById(this.state.assignmentID).className = 'selected';
         this.props.LoadTasks(this.state.assignmentID);
     }
 

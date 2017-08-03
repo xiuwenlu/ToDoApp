@@ -34,47 +34,77 @@ class App extends Component {
         this.removeFromList = this.removeFromList.bind(this);
         this.loadSublistPushNotifDeadlines = this.loadSublistPushNotifDeadlines.bind(this);
         this.needUpdateOverdue = this.needUpdateOverdue.bind(this);
+        this.LoadAll = this.LoadAll.bind(this);
         // this.updateRecordByID = this.updateRecordByID.bind(this);
                 // this.setPushNotif = this.setPushNotif.bind(this);
 
         // this.notifyMe = this.notifyMe.bind(this);
-
         this.state = {
-            signup: true, 
-            loggedIn: false,
-            signupSubmit:false,
-            loginSubmit:false,
-            username: '',
+            signup:localStorage.getItem('signup')|| true, 
+            loggedIn:localStorage.getItem('loggedIn') || false,
+            signupSubmit:localStorage.getItem('signupSubmit') || false,
+            loginSubmit:localStorage.getItem('loginSubmit') || false,
+            username: localStorage.getItem('username') || null,
             password: '',
-            passwordConf: '',
+            passwordConf:'',
             AssignmentList: [],
-            currentAssignment: null,
             TaskList:[],
-            AllTasks:[]
+            currentAssignment:'',
+            AllTasks: []
         };
     }
     
     handleLoginClick() {
+        // this.localStorage.setItem('signup', true);
+        // this.localStorage.setItem('loggedIn', false);
+
         this.setState({signup: true , loggedIn:false});
     }
 
     handleSignUpClick() {
-        this.setState({signup: false, loggedIn:false});
+        // this.localStorage.setItem('signup', false);
+        // this.localStorage.setItem('loggedIn', false);
+
+        this.setState({signup:false , loggedIn:false});
     }
 
     handleLogoutClick() {
         logout();
+        localStorage.removeItem('loggedIn')
+        localStorage.removeItem('signup');
+        localStorage.removeItem('signupSubmit');
+        localStorage.removeItem('loginSubmit');
+        localStorage.removeItem('username');
+        // localStorage.removeItem('password');
+        // localStorage.removeItem('passwordConf');
+        // localStorage.removeItem('AssignmentList');
+        // localStorage.removeItem('TaskList');
+        // localStorage.removeItem('currentAssignment');
+        // localStorage.removeItem('AllTasks');
+
         this.setState({
+            // signup:localStorage.getItem('signup'), 
+            // loggedIn:localStorage.getItem('loggedIn'),
+            // signupSubmit:localStorage.getItem('signupSubmit'),
+            // loginSubmit:localStorage.getItem('loginSubmit'),
+            // username:localStorage.getItem('username'),
+            // password:localStorage.getItem('password'),
+            // passwordConf:localStorage.getItem('passwordConf'),
+            // AssignmentList:localStorage.getItem('AssignmentList'),
+            // TaskList:localStorage.getItem('TaskList'),
+            // currentAssignment:localStorage.getItem('currentAssignment'),
+            // AllTasks: localStorage.getItem('AllTasks')
             signup:true, 
             loggedIn:false,
             signupSubmit:false,
             loginSubmit:false,
-            username: '',
-            password: '',
-            passwordConf: '',
-            AssignmentList: [],
+            username:'',
+            password:'',
+            passwordConf:'',
+            AssignmentList:[],
             TaskList:[],
-            currentAssignment:null
+            currentAssignment:'',
+            AllTasks:[]
         });
     }
 
@@ -94,35 +124,32 @@ class App extends Component {
         if (checkLoginInfo(this.state.username,this.state.password)) {
             skygear.auth.loginWithUsername(this.state.username, this.state.password).then((user) => {
             console.log(user); // user object
+            // localStorage.setItem('AssignmentList', []);
+            // localStorage.setItem('TaskList', []);
+            // localStorage.setItem('currentAssignment', null);
+            // localStorage.setItem('AllTasks', []);
+            localStorage.setItem('loggedIn', true);
+            localStorage.setItem('username', this.state.username);
+            localStorage.setItem('password', this.state.password);
+            localStorage.setItem('passwordConf', this.state.passwordConf);
+            localStorage.setItem('signupSubmit', false);
+            localStorage.setItem('loginSubmit', true);
+            localStorage.setItem('signup', true);
+
             this.setState ({
-                loggedIn: true,
-                signupSubmit:false,
-                loginSubmit:true
+                signup:localStorage.getItem('signup'), 
+                loggedIn:localStorage.getItem('loggedIn'),
+                signupSubmit:localStorage.getItem('signupSubmit'),
+                loginSubmit:localStorage.getItem('loginSubmit'),
+                username:localStorage.getItem('username'),
+                // password:localStorage.getItem('password'),
+                // passwordConf:localStorage.getItem('passwordConf'),
+                // AssignmentList:localStorage.getItem('AssignmentList'),
+                // TaskList:localStorage.getItem('TaskList'),
+                // currentAssignment:localStorage.getItem('currentAssignment'),
+                // AllTasks: localStorage.getItem('AllTasks')
             });
-            const LIMIT = 9999;
-            const Assignments = skygear.Record.extend('Assignments');
-            const query = new skygear.Query(Assignments);
-            query.overallCount = true;
-            query.limit = LIMIT;
-            skygear.privateDB.query(query).then((records) => {
-                console.log(records);
-                console.log(records.constructor);
-                var r = Array.from(records);
-                console.log(Array.isArray(records));
-                console.log(Array.isArray(r));
-                console.log(r);
-                if (records.length > 0) {
-                    this.setState ({currentAssignment: r[0]._id});                    
-                }
-                this.setState ({AssignmentList: r});
-                if(this.state.currentAssignment) {
-                    this.LoadTasks(this.state.currentAssignment);
-                }
-                this.loadAssignments(r);
-                this.GetAllTasks();
-            }, (error) => {
-                console.error(error);
-            });
+            this.LoadAll();
             }, (error) => {
                 console.error(error);    
                 if (error.error.code === skygear.ErrorCodes.InvalidCredentials ||
@@ -140,11 +167,38 @@ class App extends Component {
             skygear.auth.signupWithUsername(this.state.username, this.state.password).then((user) => {
                 console.log(user); // user object
                 alert('Welcome, signed up successfully!');
-                this.setState ({
-                    loggedIn: true,
-                    signupSubmit:true,
-                    loginSubmit:false
-                });
+
+                // localStorage.setItem('AssignmentList', []);
+                // localStorage.setItem('TaskList', []);
+                // localStorage.setItem('currentAssignment', null);
+                // localStorage.setItem('AllTasks', []);
+                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('username', this.state.username);
+                // localStorage.setItem('password', this.state.password);
+                // localStorage.setItem('passwordConf', this.state.passwordConf);
+                localStorage.setItem('signupSubmit', true);
+                localStorage.setItem('loginSubmit', false);
+                localStorage.setItem('signup', true);
+
+            this.setState ({
+                signup:localStorage.getItem('signup'), 
+                loggedIn:localStorage.getItem('loggedIn'),
+                signupSubmit:localStorage.getItem('signupSubmit'),
+                loginSubmit:localStorage.getItem('loginSubmit'),
+                username:localStorage.getItem('username'),
+                // password:localStorage.getItem('password'),
+                // passwordConf:localStorage.getItem('passwordConf'),
+                // AssignmentList:localStorage.getItem('AssignmentList'),
+                // TaskList:localStorage.getItem('TaskList'),
+                // currentAssignment:localStorage.getItem('currentAssignment'),
+                // AllTasks: localStorage.getItem('AllTasks')
+            });
+
+                // this.setState ({
+                //     loggedIn: true,
+                //     signupSubmit:true,
+                //     loginSubmit:false
+                // });
             }, (error) => {
                 console.error(error);
                 if (error.error.code === skygear.ErrorCodes.Duplicated) {
@@ -155,6 +209,43 @@ class App extends Component {
                     alert('Error!');
                 }
             });
+        }
+    }
+
+    LoadAll() {
+        const LIMIT = 9999;
+        const Assignments = skygear.Record.extend('Assignments');
+        const query = new skygear.Query(Assignments);
+        query.overallCount = true;
+        query.limit = LIMIT;
+        skygear.privateDB.query(query).then((records) => {
+            console.log(records);
+            console.log(records.constructor);
+            var r = Array.from(records);
+            console.log(Array.isArray(records));
+            console.log(Array.isArray(r));
+            console.log(r);
+            if (records.length > 0) {
+                // localStorage.setItem('currentAssignment', r[0]._id);
+                // this.setState ({currentAssignment: localStorage.getItem('currentAssignment')});
+                this.setState ({currentAssignment: r[0]._id});                   
+            }
+            localStorage.setItem('AssignmentList', r);
+            // this.setState ({AssignmentList: localStorage.getItem('AssignmentList')});
+            this.setState ({AssignmentList:r});
+
+            if(this.state.currentAssignment) {
+                this.LoadTasks(this.state.currentAssignment);
+            }
+            this.loadAssignments(r);
+            this.GetAllTasks();
+        }, (error) => {
+            console.error(error);
+        });
+    }
+    componentDidMount() {
+        if(this.state.loggedIn) {
+            window.addEventListener('load', this.LoadAll);
         }
     }
     loadSublistPushNotifDeadlines(records) {
@@ -193,20 +284,35 @@ class App extends Component {
             } 
         });
         if (type === 'task') {
-            this.setState({TaskList:array});
+            localStorage.setItem("TaskList", array);
+            // this.setState({TaskList:localStorage.getItem("TaskList")});
+                        this.setState({TaskList:array});
+
         } else {
+            localStorage.setItem("AssignmentList", array);
+            // this.setState({AssignmentList:localStorage.getItem("AssignmentList")});
             this.setState({AssignmentList:array});
         }
     }
     addCurrentAssignment(id, record) {
         console.log('yesss set assigment');
-        let newAssignmentList = this.state.AssignmentList;
+        let newAssignmentList = []
+        if (this.state.AssignmentList) {
+            newAssignmentList = this.state.AssignmentList;
+        }
         newAssignmentList.push(record);
+        localStorage.setItem("currentAssignment", id);
+        localStorage.setItem("AssignmentList", newAssignmentList);
         this.setState({currentAssignment:id, AssignmentList: newAssignmentList});
-        this.handleRemoveSelect(id);
+        // this.setState({currentAssignment:localStorage.getItem("currentAssignment"), AssignmentList: localStorage.getItem("newAssignmentList")});
+        if (id) {
+            this.handleRemoveSelect(id);
+        }
     }
 
     setSelectedAssignment(id) {
+        localStorage.setItem("currentAssignment", id);
+        // this.setState({currentAssignment: localStorage.getItem("currentAssignment")});
         this.setState({currentAssignment:id});
     }
     removeFromList(type, id) {
@@ -217,6 +323,8 @@ class App extends Component {
                     assignments.pop(assignment);
                 }
             });
+            localStorage.setItem("AssignmentList", assignments);
+            // this.setState({AssignmentList:localStorage.getItem("AssignmentList")});
             this.setState({AssignmentList:assignments});
         } else {
             let taskList = this.state.TaskList;
@@ -225,7 +333,11 @@ class App extends Component {
                     taskList.pop(task);
                 }
             });
+            localStorage.setItem("TaskList", taskList);
+
+            // this.setState({TaskList:localStorage.getItem("TaskList")});
             this.setState({TaskList:taskList});
+
         }
     }
     LoadTasks(Assignment_id) {
@@ -239,7 +351,10 @@ class App extends Component {
         console.log(records.constructor);
         var r = Array.from(records);
         console.log('Loaded records: ' + r);
+        // localStorage.setItem('TaskList', r);
         this.setState({TaskList:r});
+        // this.setState({TaskList:localStorage.getItem('TaskList')});
+
     }, (error) => {
         console.error(error);
     });
@@ -255,6 +370,7 @@ class App extends Component {
         console.log(records.constructor);
         var r = Array.from(records);
         console.log('Loaded all records: ' + r);
+        // localStorage.setItem('AllTasks', r);
         this.setState({AllTasks:r});
         this.loadSublistPushNotifDeadlines(r);
     }, (error) => {
@@ -271,22 +387,26 @@ class App extends Component {
 
     DisplayTasks() {
         if (this.state.currentAssignment) {
-            return (
-                this.state.TaskList.map((task) =>
-                <TaskCard 
-                    key={task.taskID} taskName={task.content} Deadline={task.Deadline} 
-                    currentAssignment={this.state.currentAssignment}
-                    Overdue={task.Overdue}
-                    Completed={task.Completed}
-                    Image={task.Image}
-                    DateCompleted={task.DateCompleted}
-                    id={task._id}
-                > 
-                    <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}
-                        removeFromList = {this.removeFromList}/>
-                </TaskCard>
-                )
-            );
+            let taskList = this.state.TaskList;
+            if (taskList) {
+                return (
+                    taskList.map((task) =>
+                    <TaskCard 
+                        key={task.taskID} taskName={task.content} Deadline={task.Deadline} 
+                        currentAssignment={this.state.currentAssignment}
+                        Overdue={task.Overdue}
+                        Completed={task.Completed}
+                        Image={task.Image}
+                        DateCompleted={task.DateCompleted}
+                        LoadTasks={this.LoadTasks}
+                        id={task._id}
+                    > 
+                        <DeleteAssignmentPopup key={task.taskID} type='task' id={task._id}
+                            removeFromList = {this.removeFromList}/>
+                    </TaskCard>
+                    )
+                );
+            }
         }
     }
     handleRemoveSelect(id) {
@@ -316,35 +436,48 @@ class App extends Component {
         const username = this.state.username;
         const password = this.state.password;
         const passwordConf = this.state.passwordConf;
-        const assignmentList = this.state.AssignmentList;
+        
         let button = null;
         let form = null;
         let user = null;
         let userlogo = null;
-        const listAssignments = assignmentList.map((assignment) =>
-            <AssignmentCard 
-                key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
-                courseName={assignment.Course} Deadline={assignment.Deadline}
-                assignmentID={assignment._id}
-                selected={assignment.Selected}
-                Overdue={assignment.Overdue}
-                setSelectedAssignment={this.setSelectedAssignment}
-                currentAssignment={this.state.currentAssignment}
-                LoadTasks={this.LoadTasks}
-                handleRemoveSelect={this.handleRemoveSelect}
-            > 
-                <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' 
-                    id={assignment._id} removeFromList = {this.removeFromList}/>
-            </AssignmentCard>
-        );
-
-        const listTasks = this.DisplayTasks();
+        
 
         if(loggedIn) {
             button = <LogoutButton onClick={this.handleLogoutClick} />;
             userlogo = <UserLogo />;
             //Icon made by Freepik from www.flaticon.com
             user = username;
+            let listAssignments = null;
+            let assignmentList = this.state.AssignmentList;
+
+            if(assignmentList) {
+                listAssignments = assignmentList.map((assignment) =>
+                    <AssignmentCard 
+                        key={assignment.AssignSeqNum} assignName={assignment.Assignment} 
+                        courseName={assignment.Course} Deadline={assignment.Deadline}
+                        assignmentID={assignment._id}
+                        selected={assignment.Selected}
+                        Overdue={assignment.Overdue}
+                        setSelectedAssignment={this.setSelectedAssignment}
+                        currentAssignment={this.state.currentAssignment}
+                        LoadTasks={this.LoadTasks}
+                        handleRemoveSelect={this.handleRemoveSelect}
+                    > 
+                        <DeleteAssignmentPopup key={assignment.AssignSeqNum} type='assignment' 
+                            id={assignment._id} removeFromList = {this.removeFromList}/>
+                    </AssignmentCard>
+                );
+            } 
+
+            let listTasks = this.DisplayTasks();
+
+            if (!listTasks) {
+                listTasks = <div> No tasks yet </div>;
+            }
+            if (!listAssignments) {
+                listAssignments = <div> You don't have any assignments right now </div>;
+            }
 
             form = <AssignmentForm setAssignment={this.addCurrentAssignment} 
                         addTaskToList={this.AddTaskToList}> 

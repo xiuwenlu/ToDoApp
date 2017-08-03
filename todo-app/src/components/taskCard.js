@@ -14,7 +14,6 @@ class TaskCard extends Component {
                        dateCompleted: this.props.DateCompleted,
                        completed: this.props.Completed,
                        Overdue: this.props.Overdue,
-                       //need to save these states in the database and initialize them base on them.
                      }
         this.openModal = this.openModal.bind(this);
         this.deleteCard = this.deleteCard.bind(this);
@@ -36,7 +35,7 @@ class TaskCard extends Component {
             updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
             updateRecordByID(this.props.id, 'ToDos', 'DateCompleted', completeDate);
             updateRecordByID(this.props.id, 'ToDos', 'Image', true);
-            updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);
+            updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);    
         }
     }
 
