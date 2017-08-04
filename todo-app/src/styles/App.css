@@ -261,12 +261,10 @@ ul {
 	font-weight: bolder;
 }
 #assign-heading {
-	/* text-align: left; */
-	/* display: inline-block; */
+
 	padding: 2%;
 	background-color: white;
 	border-right: 1px solid #e6e6e6;
-	/* border-radius: 5px; */
 	margin-top: -0.25%;
 }
 #add-assign-container {

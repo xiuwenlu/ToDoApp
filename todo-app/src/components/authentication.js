@@ -172,19 +172,20 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         dueTime.setMinutes(minVal);
 
         var currentTime = new Date();
-        // console.log('the current time:' + currentTime);
-        // console.log('due time: ' +  dueTime);
+        console.log('the current time:' + currentTime);
+        console.log('due time: ' +  dueTime);
         var timeDiff = dueTime - currentTime;
-        // console.log('time diff: ' +  timeDiff);
+        console.log('time diff: ' +  timeDiff);
         if (timeDiff > 0) {
             console.log("called setTimeout!!!!!!");
-            setTimeout(notifyMe(assignName, type), timeDiff);
+            setTimeout(function() {notifyMe(assignName, type)}, timeDiff);
         } else if (timeDiff < 0 && !isnew) {
             updateRecordByID(id, type, 'Overdue', true);
         }
     }
   
     export function notifyMe(task, type) {
+        console.log('called notify me!!!!!');
         if (!Notification) {
             alert('Desktop notifications not available in your browser. Try Chromium.'); 
             return;
