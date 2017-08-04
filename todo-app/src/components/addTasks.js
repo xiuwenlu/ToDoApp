@@ -4,6 +4,7 @@ import skygear from 'skygear';
 import '../App.css';
 import '../styles/foundation.css';
 import '../styles/App.css';
+import {setPushNotif} from './authentication';
 
 class AddTasks extends Component {
     constructor (props) {
@@ -36,6 +37,7 @@ class AddTasks extends Component {
             });
             skygear.privateDB.save(record).then((record) => {
                 console.log('This is how the record looks: ' + record._id);
+                setPushNotif(this.state.Deadline, this.state.taskName, 'ToDos', record._id, true);
                 this.setState ({taskName:'', Deadline:''});
                 this.props.addTaskToList(record);
             }, (error) => {

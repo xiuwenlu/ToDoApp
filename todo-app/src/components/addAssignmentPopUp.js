@@ -3,6 +3,7 @@ import skygear from 'skygear';
 import '../App.css';
 import '../styles/foundation.css';
 import '../styles/App.css';
+import {setPushNotif} from './authentication';
 
 class AddAssignmentPopUp extends Component {
 
@@ -44,9 +45,11 @@ class AddAssignmentPopUp extends Component {
         skygear.privateDB.save(record).then((record) => {
         console.log("This is how the record looks: " + record._id);
         this.props.setAssignment(record._id, record);
+        setPushNotif(this.state.Deadline, this.state.assignName, 'Assignments', record._id, true);
         this.closeModal();
         document.getElementById('task-list').innerHTML = '';
         // document.getElementById(record._id).className = 'selected';
+
         }, (error) => {
             console.error(error);
             this.setState ({ modalActive: true, assignName:'', courseName:'', Deadline:''});
