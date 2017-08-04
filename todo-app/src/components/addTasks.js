@@ -17,7 +17,6 @@ class AddTasks extends Component {
         this.addTask = this.addTask.bind(this);
         this.handleTaskName = this.handleTaskName.bind(this);
         this.handleDeadline = this.handleDeadline.bind(this);
-        const LIMIT = 9999;
     }
 
     addTask() {

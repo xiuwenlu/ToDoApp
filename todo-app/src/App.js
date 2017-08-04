@@ -3,8 +3,7 @@ import skygear from 'skygear';
 import './App.css';
 import './styles/foundation.css';
 import './styles/App.css';
-import {logout, checkLoginInfo, checkSignupInfo, checkOverdue, updateRecordByID, loadSublistPushNotifDeadlines,
-        loadAssignments, setPushNotif } from './components/authentication';
+import {logout, checkLoginInfo, checkSignupInfo, checkOverdue, setPushNotif } from './components/authentication';
 import {SignupButton, LoginButton ,LogoutButton, SignupForm, LoginForm, UserLogo} from './components/login-signup';
 import AssignmentForm from './components/AssignmentForm';
 import AddTasks from './components/addTasks';
