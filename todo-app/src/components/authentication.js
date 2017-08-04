@@ -176,15 +176,17 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         console.log('due time: ' +  dueTime);
         var timeDiff = dueTime - currentTime;
         console.log('time diff: ' +  timeDiff);
-        if (timeDiff > 0) {
+        if (timeDiff > 300000) {
             console.log("called setTimeout!!!!!!");
-            setTimeout(function() {notifyMe(assignName, type)}, timeDiff);
+            setTimeout(function() {notifyMe(assignName, type, true)}, timeDiff - 300000);
+        } else if (timeDiff < 300000 && timeDiff > 0) {
+          setTimeout(function() {notifyMe(assignName, type, false)}, 1000)
         } else if (timeDiff < 0 && !isnew) {
             updateRecordByID(id, type, 'Overdue', true);
         }
     }
   
-    export function notifyMe(task, type) {
+    export function notifyMe(task, type, isInFiveMins) {
         console.log('called notify me!!!!!');
         if (!Notification) {
             alert('Desktop notifications not available in your browser. Try Chromium.'); 
@@ -194,12 +196,15 @@ export function updateRecordByID(id, type, coln, updateDetails) {
             Notification.requestPermission();
         }
         let label = 'assignment';
+        let mins = isInFiveMins ? 'in 5 minutes!' : 'soon!';
         if(type === 'ToDos') {
           label = 'task';
         }
-        var notification = new Notification('You have a(n) ' + label + ' due', {
+         console.log('label:' + label);
+
+        var notification = new Notification('You have a(n) ' + label + ' due ' + mins, {
             icon: require('../images/icon-todo-100.png'),
-            body: 'Your ' + label +': ' + task + ' is due!',
+            body: 'Your ' + label +': ' + task + ' is due ' + mins
         });
         notification.onclick = function () {
             window.open('https://xiuwenlu.github.io/ToDoApp/');      
