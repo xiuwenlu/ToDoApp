@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import '../styles/foundation.css';
 import '../styles/App.css';
-import {checkOverdue, updateRecordByID} from './authentication';
+import {checkOverdue,BatchUpdatesByID, updateRecordByID} from './authentication';
 
 class TaskCard extends Component {
 
@@ -31,21 +31,28 @@ class TaskCard extends Component {
         if (!this.state.completed && !checkOverdue(this.props.Deadline)) {
             let completeDate = new Date()
             completeDate = completeDate.toString();
-            // document.getElementsBy(this.props.id).className = 'completed-tasks';
+            document.getElementById(this.props.id).className = 'completed-tasks';
             this.setState({image:true, completed:true, dateCompleted:completeDate, Overdue: true});
-            updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
-            updateRecordByID(this.props.id, 'ToDos', 'CompletedDate', completeDate);
-            updateRecordByID(this.props.id, 'ToDos', 'Image', true);
-            updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);    
+            let dict = {
+                'Completed': true,
+                'CompletedDate': completeDate,
+                'Image': true,
+                'Overdue': true
+            };
+            BatchUpdatesByID(this.props.id, 'ToDos', dict);
+            // updateRecordByID(this.props.id, 'ToDos', 'Completed', true);
+            // updateRecordByID(this.props.id, 'ToDos', 'CompletedDate', completeDate);
+            // updateRecordByID(this.props.id, 'ToDos', 'Image', true);
+            // updateRecordByID(this.props.id, 'ToDos', 'Overdue', true);    
         }
     }
-
     render() {
         let alert ='';
         let image = this.state.image ? require('../images/black-check.png') : require('../images/gray-check.png')
         let className ='';
         let completedTitle ='';
         let completedClass ='';
+        let taskClass = 'task-card';
         if (!this.state.completed && checkOverdue(this.props.Deadline)) {
             alert = "Overdue";
             className = "Overdue-task";
@@ -56,9 +63,12 @@ class TaskCard extends Component {
             completedTitle = 'Compeleted On';
             completedClass = 'completed';
             let date = this.state.dateCompleted;
+            console.log('completed date: ' + date);
             alert = date.split(" ")[1] + ' ' + date.split(" ")[2] +' ' + date.split(" ")[3];
             image = require('../images/black-check.png');
             className = 'completed-date';
+            taskClass = 'completed-tasks';
+            
         } else if (!this.state.Overdue && !checkOverdue(this.props.Deadline)) {
             let deadline = this.props.Deadline;
             var dateVal = deadline.split('T')[0];
@@ -83,7 +93,7 @@ class TaskCard extends Component {
         
         return(
             this.state.modalActive && (
-                <div key={this.props.id} id='task-card'>
+                <div key={this.props.id} id={this.props.id} className={taskClass}>
                     <div className='row'>
                         <div className='small-2 columns'>
                             <button id='task-completed' onClick={this.handleCompleteTask}><img src={image} alt=''></img></button>

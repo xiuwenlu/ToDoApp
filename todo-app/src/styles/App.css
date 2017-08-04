@@ -310,7 +310,7 @@ ul {
 .unselected h6, .selected h6 {
 	color: #888888;
 }
-.unselected button, #task-card button, .selected button {
+.unselected button, .task-card button, .selected button, .completed-tasks button {
 	background-color: transparent;
 	color: #e6e6e6;
 	width: 30%;
@@ -351,7 +351,7 @@ ul {
 	text-align: center;
 }
 
-#task-card {
+.task-card, .completed-tasks {
 	border: 1px solid #e6e6e6;
 	padding: 2%; 
 	padding-top: 1%; 
@@ -361,7 +361,10 @@ ul {
 	text-align: left;
 	margin-left:-4%; 
 }
-#task-card p {
+.completed-tasks {
+	background-color: #F8F9FA !important;
+}
+.task-card p, .completed-tasks p {
 	font-size: 14px;
 	margin-left: -25%;
 }

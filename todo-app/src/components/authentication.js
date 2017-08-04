@@ -139,6 +139,29 @@ export function updateRecordByID(id, type, coln, updateDetails) {
           });
   }
 
+  export function BatchUpdatesByID(id, type, dict) {
+      const ToDos = skygear.Record.extend('ToDos');
+      var query = new skygear.Query(ToDos);
+      if (type === 'Assignments') {
+          const Assignments = skygear.Record.extend('Assignments');
+          query = new skygear.Query(Assignments);
+      } 
+      query.equalTo('_id', id);
+      skygear.privateDB.query(query).then((records) => {
+          var rec = records[0];
+          
+          for (var key in dict) {
+            rec[key] = dict[key];
+            console.log('update details: ' + key + ": " + dict.key);
+          }
+          return skygear.privateDB.save(rec);
+          }).then((records) => {
+          console.log('update success');
+          }, (error) => {
+          console.error(error);
+          });
+  }
+
   export function setPushNotif(deadline, assignName, type, id, isnew) {
         var dateVal = deadline.split('T')[0];
         var timeVal = deadline.split('T')[1];
