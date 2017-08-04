@@ -287,7 +287,7 @@ ul {
 	padding: 3%;
 	margin-left: -7%;
 	margin-right: -7%;
-	margin-bottom: -5%;
+	margin-bottom: -7%;
 }
 .popup {
 	position:fixed;
@@ -314,6 +314,9 @@ ul {
 	padding-left: 6%;
 	height: 10%;
 	margin-bottom: 4px;
+}
+.unselected:hover, .selected:hover {
+	cursor: pointer;
 }
 
 .unselected h6, .selected h6 {

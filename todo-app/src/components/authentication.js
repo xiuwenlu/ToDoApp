@@ -177,7 +177,8 @@ export function updateRecordByID(id, type, coln, updateDetails) {
         var timeDiff = dueTime - currentTime;
         // console.log('time diff: ' +  timeDiff);
         if (timeDiff > 0) {
-            setTimeout(function(assignName, type) {notifyMe(assignName, type)}, timeDiff);
+            console.log("called setTimeout!!!!!!");
+            setTimeout(notifyMe(assignName, type), timeDiff);
         } else if (timeDiff < 0 && !isnew) {
             updateRecordByID(id, type, 'Overdue', true);
         }

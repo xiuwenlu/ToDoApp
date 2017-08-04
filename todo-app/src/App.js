@@ -35,10 +35,7 @@ class App extends Component {
         this.loadSublistPushNotifDeadlines = this.loadSublistPushNotifDeadlines.bind(this);
         this.needUpdateOverdue = this.needUpdateOverdue.bind(this);
         this.LoadAll = this.LoadAll.bind(this);
-        // this.updateRecordByID = this.updateRecordByID.bind(this);
-                // this.setPushNotif = this.setPushNotif.bind(this);
 
-        // this.notifyMe = this.notifyMe.bind(this);
         this.state = {
             signup:localStorage.getItem('signup')|| true, 
             loggedIn:localStorage.getItem('loggedIn') || false,
@@ -284,13 +281,11 @@ class App extends Component {
             } 
         });
         if (type === 'task') {
-            localStorage.setItem("TaskList", array);
-            // this.setState({TaskList:localStorage.getItem("TaskList")});
+            // localStorage.setItem("TaskList", array);
             this.setState({TaskList:array});
 
         } else {
-            localStorage.setItem("AssignmentList", array);
-            // this.setState({AssignmentList:localStorage.getItem("AssignmentList")});
+            // localStorage.setItem("AssignmentList", array);
             this.setState({AssignmentList:array});
         }
     }
