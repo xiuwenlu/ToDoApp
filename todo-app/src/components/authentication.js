@@ -197,7 +197,7 @@ export function updateRecordByID(id, type, coln, updateDetails) {
           label = 'task';
         }
         var notification = new Notification('You have a(n) ' + label + ' due', {
-            icon: './images/icon-todo-100.png',
+            icon: require('../images/icon-todo-100.png'),
             body: 'Your ' + label +': ' + task + ' is due!',
         });
         notification.onclick = function () {
